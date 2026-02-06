@@ -1,0 +1,584 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>CareerHub | Premium Student Analysis</title>
+        <!-- Google Fonts -->
+        <link rel="preconnect" href="https://fonts.googleapis.com">
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700&display=swap"
+                rel="stylesheet">
+        <!-- Font Awesome -->
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+        <!-- Custom CSS -->
+        <link rel="stylesheet" href="./static/style.css?v=mobile_v1">
+</head>
+
+<body>
+        <div class="app-container">
+                
+                <!-- Sidebar Navigation -->
+                <nav class="sidebar">
+                        <div class="logo">
+                                <i class="fa-solid fa-graduation-cap"></i> <span>CareerHub</span>
+                        </div>
+                        <ul class="nav-links">
+                                <li><a href="index.html" class="nav-item"><i class="fa-solid fa-home"></i>
+                                                Homepage</a></li>
+                                <li><a href="dashboard.html" class="nav-item"><i
+                                                        class="fa-solid fa-chart-pie"></i> Personal
+                                                Dashboard</a></li>
+
+                                <li><a href="career.html" class="nav-item"><i
+                                                        class="fa-solid fa-compass"></i> Career
+                                                Explorer</a></li>
+                                <li><a href="roadmap.html" class="nav-item"><i class="fa-solid fa-map"></i>
+                                                Roadmap
+                                                Builder</a></li>
+                                <li><a href="market.html" class="nav-item"><i class="fa-solid fa-globe"></i>
+                                                Booming skills with current trend</a></li>
+                                <li><a href="leetcode.html" class="nav-item"><i
+                                                        class="fa-solid fa-code"></i>
+                                                LeetCode Analysis</a></li>
+                                <li><a href="resume_builder.html" class="nav-item"><i
+                                                        class="fa-solid fa-file-invoice"></i>
+                                                Resume Builder</a></li>
+                                <li><a href="analysis.html" class="nav-item"><i
+                                                        class="fa-brands fa-github"></i>
+                                                GitHub Analysis</a></li>
+
+                                <!-- <li><a href="mentors.html" class="nav-item"><i
+                                                        class="fa-solid fa-users"></i> Mentor
+                                                Network</a></li> -->
+                                <!-- <li><a href="stories.html" class="nav-item"><i class="fa-solid fa-star"></i>
+                                                Success
+                                                Stories</a></li> -->
+                                <!-- <li><a href="institution.html" class="nav-item"><i
+                                                        class="fa-solid fa-university"></i>
+                                                Institution Portal</a></li> -->
+                                <!-- <li><a href="support.html" class="nav-item"><i
+                                                        class="fa-solid fa-headset"></i> Support
+                                                Center</a></li> -->
+                        </ul>
+                        <div class="user-info">
+                                
+                                <div class="avatar">A</div>
+                                <div class="details">
+                                        <span class="name">Alex User</span>
+                                        <a href="index.html"
+                                                style="color: var(--secondary); font-size: 0.8rem; text-decoration: none;">Logout</a>
+                                </div>
+                                
+                        </div>
+                </nav>
+                
+
+                <!-- Main Content -->
+                <main class="main-content">
+                        
+<div
+    style="position: relative; width: 100vw; height: 100vh; overflow: hidden; background: linear-gradient(to bottom, #87CEEB 0%, #E0F6FF 100%);">
+
+    <!-- Game UI Header -->
+    <div id="ui"
+        style="position: absolute; top: 20px; left: 20px; color: #2c3e50; background: rgba(255, 255, 255, 0.9); padding: 15px; border-radius: 10px; box-shadow: 0 4px 6px rgba(0,0,0,0.1); user-select: none;">
+        <div style="font-size: 1.2rem; font-weight: bold; margin-bottom: 5px;">
+            <i class="fa-solid fa-crosshairs"></i> Bounty Hunter Mode
+        </div>
+        <div style="font-size: 1rem;">
+            Score: <span id="visual-score" style="color: #e74c3c; font-weight: bold;">0</span> / 50 XP
+        </div>
+        <div style="font-size: 0.9rem; margin-top: 5px; color: #7f8c8d;">
+            Wave <span id="wave-num">1</span> of 5
+        </div>
+    </div>
+
+    <!-- Exit Button -->
+    <a href="dashboard.html"
+        style="position: absolute; top: 20px; right: 20px; background: #e74c3c; color: white; padding: 10px 20px; border-radius: 8px; text-decoration: none; font-weight: bold; box-shadow: 0 4px 6px rgba(0,0,0,0.2);">
+        <i class="fa-solid fa-door-open"></i> Exit Game
+    </a>
+
+    <!-- Question Box (Footer) -->
+    <div id="question-box"
+        style="position: absolute; bottom: 30px; left: 50%; transform: translateX(-50%); width: 80%; max-width: 800px; background: rgba(15, 23, 42, 0.95); color: white; padding: 1.5rem; border-radius: 16px; border: 1px solid rgba(255,255,255,0.1); box-shadow: 0 10px 30px rgba(0,0,0,0.5); text-align: center;">
+
+        <h3 id="q-skill"
+            style="color: #f59e0b; font-size: 0.9rem; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 0.5rem;">
+            Loading...
+        </h3>
+        <h2 id="q-text" style="font-size: 1.3rem; margin-bottom: 1.5rem;">
+            Get Ready! Targets incoming...
+        </h2>
+
+        <!-- Options Display Area -->
+        <div id="options-display" style="display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; text-align: left;">
+            <!-- Options injected by JS -->
+        </div>
+    </div>
+
+    <!-- Hidden Form for Final Submission -->
+    <form id="submission-form" action="#" method="POST" style="display: none;">
+        <input type="hidden" name="total_xp" id="total_xp_input" value="0">
+    </form>
+
+    <canvas id="gameCanvas"></canvas>
+</div>
+
+<script>
+    // --- Game Configuration & State ---
+    const bountyQuestions = [];
+    let currentQuestionIndex = 0;
+    const totalQuestions = bountyQuestions.length;
+    let earnedXP = 0;
+
+    // Canvas Setup
+    const canvas = document.getElementById('gameCanvas');
+    const ctx = canvas.getContext('2d');
+    canvas.width = window.innerWidth;
+    canvas.height = window.innerHeight;
+
+    // Game Objects
+    let mouse = { x: 0, y: 0 };
+    let bullets = [];
+    let targets = [];
+    const optionLabels = ['A', 'B', 'C', 'D'];
+    let gameActive = true;
+    let transitionMode = false;
+
+    // --- Core Game Functions ---
+
+    function loadQuestion(index) {
+        if (index >= totalQuestions) {
+            endGame();
+            return;
+        }
+
+        const q = bountyQuestions[index];
+        document.getElementById('q-skill').textContent = `Question ${index + 1} • ${q.skill || 'General'}`;
+        document.getElementById('q-text').textContent = q.question;
+        document.getElementById('wave-num').textContent = index + 1;
+
+        // Populate Options Display (New Layout)
+        const optsContainer = document.getElementById('options-display');
+        optsContainer.innerHTML = '';
+        q.options.forEach((optText, i) => {
+            const label = optionLabels[i];
+            const div = document.createElement('div');
+            div.style.background = 'rgba(255,255,255,0.1)';
+            div.style.padding = '0.8rem';
+            div.style.borderRadius = '8px';
+            div.style.fontSize = '0.9rem';
+            div.innerHTML = `<strong style="color: #f59e0b; margin-right: 5px;">${label}.</strong> ${optText}`;
+            optsContainer.appendChild(div);
+        });
+
+        // Create Targets (Only Letters now)
+        targets = [];
+        const spacing = canvas.width / 5;
+
+        q.options.forEach((optText, i) => {
+            targets.push({
+                x: spacing * (i + 1),
+                y: 150 + Math.random() * 100,
+                radius: 35, // Slightly smaller
+                label: optionLabels[i], // Just "A", "B", etc.
+                isCorrect: (i === q.answer),
+                alive: true,
+                swing: Math.random() * Math.PI,
+                swingSpeed: 0.02 + Math.random() * 0.02
+            });
+        });
+    }
+
+    function truncateText(str, n) {
+        return (str.length > n) ? str.substr(0, n - 1) + '...' : str;
+    }
+
+    function drawMan(x, y) {
+        const angle = Math.atan2(mouse.y - y, mouse.x - x);
+
+        // Body
+        ctx.fillStyle = "#2c3e50";
+        ctx.fillRect(x - 10, y + 40, 8, 30); // Left Leg
+        ctx.fillRect(x + 2, y + 40, 8, 30);  // Right Leg
+        ctx.fillStyle = "#e74c3c";
+        ctx.fillRect(x - 15, y, 30, 45); // Torso
+
+        // Head
+        ctx.fillStyle = "#ffdbac";
+        ctx.beginPath(); ctx.arc(x, y - 15, 15, 0, Math.PI * 2); ctx.fill();
+
+        // Gun Arm (Rotates)
+        ctx.save();
+        ctx.translate(x, y + 10);
+        ctx.rotate(angle);
+        ctx.fillStyle = "#333";
+        ctx.fillRect(0, -5, 50, 12); // Extended Gun barrel
+        ctx.restore();
+    }
+
+    // --- Main Loop ---
+    function update() {
+        if (!gameActive && !transitionMode) return;
+
+        ctx.clearRect(0, 0, canvas.width, canvas.height); // Clear Screen
+
+        // Draw Targets
+        targets.forEach((t) => {
+            if (!t.alive) return;
+
+            // Physics: Swing Motion
+            t.swing += t.swingSpeed;
+            let ox = Math.sin(t.swing) * 40; // Horizontal swing offset
+
+            // Draw String
+            ctx.beginPath();
+            ctx.moveTo(t.x, 0); // Tether to ceiling
+            ctx.lineTo(t.x + ox, t.y);
+            ctx.strokeStyle = "#7f8c8d";
+            ctx.lineWidth = 2;
+            ctx.stroke();
+
+            // Draw Circle
+            ctx.beginPath();
+            ctx.arc(t.x + ox, t.y, t.radius, 0, Math.PI * 2);
+            ctx.fillStyle = "white";
+            ctx.fill();
+            ctx.strokeStyle = t.isCorrect && false ? "#27ae60" : "#c0392b"; // Cheat mode off
+            ctx.lineWidth = 4;
+            ctx.stroke();
+
+            // Draw Label (A, B, C, D)
+            ctx.fillStyle = "#c0392b";
+            ctx.font = "bold 32px Outfit, Arial";
+            ctx.textAlign = "center";
+            ctx.textBaseline = "middle";
+            ctx.fillText(t.label, t.x + ox, t.y);
+        });
+
+        // Update & Draw Bullets
+        for (let i = bullets.length - 1; i >= 0; i--) {
+            let b = bullets[i];
+            b.x += b.velX;
+            b.y += b.velY;
+
+            // Draw Bullet
+            ctx.fillStyle = "#f39c12"; // Gold bullet
+            ctx.beginPath();
+            ctx.arc(b.x, b.y, 6, 0, Math.PI * 2);
+            ctx.fill();
+
+            // Collision Detection
+            if (!transitionMode) {
+                targets.forEach(t => {
+                    if (!t.alive) return;
+
+                    let ox = Math.sin(t.swing) * 40;
+                    let dist = Math.hypot(b.x - (t.x + ox), b.y - t.y);
+
+                    if (dist < t.radius) {
+                        // HIT!
+                        bullets.splice(i, 1); // Remove bullet
+                        handleHit(t);
+                    }
+                });
+            }
+
+            // Remove if off screen
+            if (b && (b.x > canvas.width || b.x < 0 || b.y > canvas.height || b.y < 0)) {
+                bullets.splice(i, 1);
+            }
+        }
+
+        // Draw Player Character
+        drawMan(120, canvas.height - 80);
+
+        requestAnimationFrame(update);
+    }
+
+    function handleHit(target) {
+        if (transitionMode) return;
+        transitionMode = true; // Block input during transition
+
+        // Visual Feedback
+        target.alive = false;
+
+        if (target.isCorrect) {
+            // Correct!
+            earnedXP += 10;
+            document.getElementById('visual-score').innerText = earnedXP;
+            showFeedback("Correct ✅", "#27ae60");
+        } else {
+            // Incorrect
+            showFeedback("Missed ❌", "#e74c3c");
+        }
+
+        // Delay then Next Question
+        setTimeout(() => {
+            currentQuestionIndex++;
+            loadQuestion(currentQuestionIndex);
+            transitionMode = false;
+        }, 1500);
+    }
+
+    function showFeedback(text, color) {
+        // Overlay Effect
+        const overlay = document.createElement('div');
+        overlay.innerText = text;
+        overlay.style.position = 'absolute';
+        overlay.style.top = '40%';
+        overlay.style.left = '50%';
+        overlay.style.transform = 'translate(-50%, -50%)';
+        overlay.style.fontSize = '4rem';
+        overlay.style.fontWeight = 'bold';
+        overlay.style.color = color;
+        overlay.style.textShadow = '0 5px 15px rgba(0,0,0,0.3)';
+        overlay.style.zIndex = '100';
+        overlay.style.animation = 'fadeUp 1.5s forwards';
+
+        // Add style for animation
+        const style = document.createElement('style');
+        style.innerHTML = `
+            @keyframes fadeUp {
+                0% { opacity: 0; transform: translate(-50%, -40%); }
+                20% { opacity: 1; transform: translate(-50%, -50%); }
+                80% { opacity: 1; transform: translate(-50%, -50%); }
+                100% { opacity: 0; transform: translate(-50%, -60%); }
+            }
+        `;
+        document.head.appendChild(style);
+        document.body.appendChild(overlay);
+
+        setTimeout(() => overlay.remove(), 1500);
+    }
+
+    function endGame() {
+        gameActive = false;
+        document.getElementById('q-text').innerText = "Run Complete! Saving XP...";
+        document.getElementById('total_xp_input').value = earnedXP;
+        // Submit Form
+        document.getElementById('submission-form').submit();
+    }
+
+    // --- Input Handling ---
+    window.addEventListener('mousemove', (e) => {
+        mouse.x = e.clientX;
+        mouse.y = e.clientY;
+    });
+
+    window.addEventListener('click', () => {
+        if (!gameActive || transitionMode) return;
+
+        // Limit Rate of Fire
+        if (bullets.length > 2) return;
+
+        const playerX = 120;
+        const playerY = canvas.height - 80;
+        const angle = Math.atan2(mouse.y - playerY, mouse.x - playerX);
+        const speed = 25; // Bullet Speed
+
+        bullets.push({
+            x: playerX + Math.cos(angle) * 40,
+            y: playerY + Math.sin(angle) * 40,
+            velX: Math.cos(angle) * speed,
+            velY: Math.sin(angle) * speed
+        });
+    });
+
+    // Resize Handler
+    window.addEventListener('resize', () => {
+        canvas.width = window.innerWidth;
+        canvas.height = window.innerHeight;
+    });
+
+    // --- Init ---
+    loadQuestion(0);
+    update();
+
+</script>
+
+                </main>
+        </div>
+
+        <!-- Chatbot Floating UI -->
+        <div id="chatbot-container" style="z-index: 10000;">
+                <!-- Toggle Button -->
+                <button id="chat-toggle-btn" onclick="toggleChat()"
+                        style="position: fixed; bottom: 30px; right: 30px; width: 60px; height: 60px; border-radius: 50%; background: linear-gradient(135deg, var(--primary), var(--secondary)); border: none; color: white; font-size: 1.5rem; cursor: pointer; box-shadow: 0 4px 15px rgba(99, 102, 241, 0.4); transition: transform 0.3s ease; display: flex; align-items: center; justify-content: center;">
+                        <i class="fa-solid fa-robot"></i>
+                </button>
+
+                <!-- Chat Window -->
+                <div id="chat-window"
+                        style="position: fixed; bottom: 100px; right: 30px; width: 400px; height: 600px; background: rgba(15, 23, 42, 0.95); backdrop-filter: blur(12px); -webkit-backdrop-filter: blur(12px); border: 1px solid rgba(255,255,255,0.1); border-radius: 16px; box-shadow: 0 10px 40px rgba(0,0,0,0.4); display: none; flex-direction: column; overflow: hidden; transform-origin: bottom right; transition: all 0.3s cubic-bezier(0.19, 1, 0.22, 1);">
+
+                        <!-- Header -->
+                        <div
+                                style="background: rgba(255,255,255,0.05); padding: 1rem; display: flex; align-items: center; justify-content: space-between; border-bottom: 1px solid rgba(255,255,255,0.05);">
+                                <div style="display: flex; align-items: center; gap: 10px;">
+                                        <div
+                                                style="background: rgba(16, 185, 129, 0.2); width: 32px; height: 32px; border-radius: 50%; display: flex; align-items: center; justify-content: center; color: #10b981;">
+                                                <i class="fa-solid fa-robot" style="font-size: 0.9rem;"></i>
+                                        </div>
+                                        <div>
+                                                <h4 style="font-size: 1rem; margin: 0; color: white;">EduBot AI</h4>
+                                                <span style="font-size: 0.7rem; color: #10b981;">● Online</span>
+                                        </div>
+                                </div>
+                                <button onclick="toggleChat()"
+                                        style="background: none; border: none; color: var(--text-muted); cursor: pointer; font-size: 1.1rem;">
+                                        <i class="fa-solid fa-times"></i>
+                                </button>
+                        </div>
+
+                        <!-- Messages Area -->
+                        <div id="chat-messages"
+                                style="flex: 1; padding: 1rem; overflow-y: auto; display: flex; flex-direction: column; gap: 1rem;">
+                                <div class="message bot"
+                                        style="background: rgba(255,255,255,0.05); align-self: flex-start; max-width: 80%; padding: 0.6rem 0.8rem; border-radius: 12px 12px 12px 0; font-size: 0.9rem; color: #e2e8f0;">
+                                        Hi Alex! 👋 I'm your AI mentor. Ask me
+                                        anything about your skills, career path, or coursework!
+                                </div>
+                        </div>
+
+                        <!-- Input Area -->
+                        <div
+                                style="padding: 1rem; background: rgba(0,0,0,0.2); border-top: 1px solid rgba(255,255,255,0.05);">
+                                <form id="chat-form" onsubmit="sendChatMessage(event)"
+                                        style="display: flex; gap: 0.5rem;">
+                                        <input type="text" id="chat-input" placeholder="Ask about projects, skills..."
+                                                required
+                                                style="flex: 1; background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.1); border-radius: 20px; padding: 0.6rem 1rem; color: white; font-size: 0.9rem; outline: none;">
+                                        <button type="submit"
+                                                style="background: var(--primary); border: none; border-radius: 50%; width: 36px; height: 36px; display: flex; align-items: center; justify-content: center; color: white; cursor: pointer;">
+                                                <i class="fa-solid fa-paper-plane" style="font-size: 0.8rem;"></i>
+                                        </button>
+                                </form>
+                        </div>
+                </div>
+        </div>
+
+        <script>
+                let chatOpen = false;
+                let chatHistory = [];
+
+                function toggleChat() {
+                        const win = document.getElementById('chat-window');
+                        const icon = document.querySelector('#chat-toggle-btn i');
+
+                        chatOpen = !chatOpen;
+                        if (chatOpen) {
+                                win.style.display = 'flex';
+                                icon.classList.remove('fa-robot');
+                                icon.classList.add('fa-chevron-down');
+                                setTimeout(() => document.getElementById('chat-input').focus(), 100);
+                        } else {
+                                win.style.display = 'none';
+                                icon.classList.remove('fa-chevron-down');
+                                icon.classList.add('fa-robot');
+                        }
+                }
+
+                async function sendChatMessage(e) {
+                        e.preventDefault();
+                        const input = document.getElementById('chat-input');
+                        const msg = input.value.trim();
+                        if (!msg) return;
+
+                        // 1. Add User Message
+                        addMessage(msg, 'user');
+                        input.value = '';
+                        input.disabled = true;
+
+                        // Add to history
+                        chatHistory.push({ role: "user", content: msg });
+
+                        // 2. Show Loading
+                        const loaderId = addLoader();
+
+                        try {
+                                const response = await fetch('/api/chat', {
+                                        method: 'POST',
+                                        headers: { 'Content-Type': 'application/json' },
+                                        body: JSON.stringify({
+                                                message: msg,
+                                                history: chatHistory
+                                        })
+                                });
+
+                                const data = await response.json();
+                                removeLoader(loaderId);
+
+                                if (data.reply) {
+                                        addMessage(data.reply, 'bot');
+                                        chatHistory.push({ role: "assistant", content: data.reply });
+                                } else {
+                                        addMessage("Sorry, I encountered an error. Please try again.", 'bot');
+                                }
+
+                        } catch (err) {
+                                removeLoader(loaderId);
+                                console.error(err);
+                                addMessage("Network error. Please try again.", 'bot');
+                        } finally {
+                                input.disabled = false;
+                                input.focus();
+                        }
+                }
+
+                function addMessage(text, sender) {
+                        const container = document.getElementById('chat-messages');
+                        const div = document.createElement('div');
+
+                        // Styles remain same but we add 'markdown-content' class concept via inline styles
+                        const baseStyle = "max-width: 85%; padding: 0.8rem 1rem; font-size: 0.95rem; line-height: 1.5; word-wrap: break-word; box-shadow: 0 2px 5px rgba(0,0,0,0.1);";
+                        const userStyle = "background: var(--primary); color: white; align-self: flex-end; border-radius: 12px 12px 0 12px;";
+                        const botStyle = "background: rgba(255,255,255,0.1); color: #e2e8f0; align-self: flex-start; border-radius: 12px 12px 12px 0;";
+
+                        div.style.cssText = baseStyle + (sender === 'user' ? userStyle : botStyle);
+
+                        // Simple Markdown Parser
+                        if (sender === 'bot') {
+                                let formatted = text
+                                        // Bold **text**
+                                        .replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>')
+                                        // Italic *text*
+                                        .replace(/\*(.*?)\*/g, '<em>$1</em>')
+                                        // Code blocks `text`
+                                        .replace(/`(.*?)`/g, '<code style="background:rgba(0,0,0,0.3); padding:2px 4px; border-radius:4px; font-family:monospace;">$1</code>')
+                                        // Lists - (must start at new line)
+                                        .replace(/^- (.*$)/gim, '<li>$1</li>')
+                                        // Line breaks to <br>
+                                        .replace(/\n/g, '<br>');
+
+                                div.innerHTML = formatted;
+                        } else {
+                                div.innerText = text;
+                        }
+
+                        container.appendChild(div);
+                        container.scrollTop = container.scrollHeight;
+                }
+
+                function addLoader() {
+                        const container = document.getElementById('chat-messages');
+                        const div = document.createElement('div');
+                        div.id = 'chat-loader';
+                        div.style.cssText = "align-self: flex-start; padding: 0.5rem 1rem; background: rgba(255,255,255,0.05); border-radius: 12px; color: var(--text-muted); font-size: 0.8rem;";
+                        div.innerHTML = '<i class="fa-solid fa-circle-notch fa-spin"></i> Thinking...';
+                        container.appendChild(div);
+                        container.scrollTop = container.scrollHeight;
+                        return div.id;
+                }
+
+                function removeLoader(id) {
+                        const el = document.getElementById(id);
+                        if (el) el.remove();
+                }
+        </script>
+</body>
+
+</html>
