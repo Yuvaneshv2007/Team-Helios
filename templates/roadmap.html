@@ -1,0 +1,61 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="page-header animate-fade-in">
+    <h1 class="page-title">Roadmap Builder</h1>
+    <p style="color: var(--text-muted);">Your personalized step-by-step path to success.</p>
+</div>
+
+<div class="glass-card animate-fade-in" style="padding: 2rem;">
+    <h2 style="margin-bottom: 2rem;">Your Path to: <span style="color: var(--primary);">{{ student.top_roles[0]['role']
+            if student and student.top_roles else 'Success' }}</span></h2>
+
+    <div style="position: relative; padding-left: 1.5rem; border-left: 2px solid var(--glass-border);">
+        {% if student and student.roadmap %}
+        {% for step in student.roadmap %}
+        <!-- Determine styles based on status -->
+        {% set status_color = '#10b981' %} {# Default for 'Completed' #}
+        {% set bg_color_rgba = 'rgba(16,185,129,0.1)' %} {# Default for 'Completed' #}
+        {% set btn_class = 'btn' %} {# Default for 'Completed' and 'Locked' #}
+        {% set btn_text = step.status %} {# Default text #}
+
+        {% if step.status == 'Focus' %}
+        {% set status_color = '#6366f1' %} <!-- Primary -->
+        {% set bg_color_rgba = 'rgba(99, 102, 241, 0.1)' %}
+        {% set btn_class = 'btn btn-primary' %}
+        {% set btn_text = 'Concentrate' %}
+        {% elif step.status == 'Locked' %}
+        {% set status_color = '#94a3b8' %} <!-- Muted -->
+        {% set bg_color_rgba = 'transparent' %}
+        {% set btn_class = 'btn' %}
+        {# btn_text remains step.status, which is 'Locked' #}
+        {% endif %}
+
+        <div style="margin-bottom: 3rem; position: relative; padding-left: 1rem;">
+            <div
+                style="position: absolute; left: -2.35rem; top: 0; width: 20px; height: 20px; background: {{ status_color }}; border-radius: 50%; border: 4px solid var(--bg-card);">
+            </div>
+            <h3 style="color: {{ status_color }}; font-size: 1.1rem;">Step {{ loop.index }}: {{ step.title }}</h3>
+            <p style="color: var(--text-muted); font-size: 0.9rem;">{{ step.description }}</p>
+
+            {% if step.status == 'Focus' %}
+            <button class="{{ btn_class }}" style="padding: 0.3rem 0.8rem; font-size: 0.8rem; margin-top: 0.5rem;">
+                {{ btn_text }}
+            </button>
+            {% else %}
+            <button class="{{ btn_class }}"
+                style="padding: 0.3rem 0.8rem; font-size: 0.8rem; margin-top: 0.5rem; background: {{ bg_color_rgba }}; color: {{ status_color }}; border: 1px solid {{ 'var(--glass-border)' if step.status == 'Locked' else 'transparent' }};">
+                {{ btn_text }}
+            </button>
+            {% endif %}
+        </div>
+        {% endfor %}
+        {% else %}
+        <div style="margin-bottom: 3rem; text-align: center; color: var(--text-muted);">
+            <p>Upload your resume to generate a personalized roadmap!</p>
+            <a href="{{ url_for('dashboard') }}" class="btn btn-primary" style="margin-top: 1rem;">Go to Dashboard</a>
+        </div>
+        {% endif %}
+    </div>
+</div>
+{% endblock %}
