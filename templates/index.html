@@ -405,7 +405,7 @@
 
     <video autoplay muted loop playsinline class="fixed-bg-video">
         <!-- Using standard Flask static folder pattern -->
-        <source src="./static/bg_video.mp4" type="video/mp4">
+        <source src="{{ url_for('static', filename='bg_video.mp4') }}" type="video/mp4">
     </video>
     <nav class="nav-bar">
         <div class="logo-circle">
@@ -419,13 +419,13 @@
         </div> -->
 
         <div class="nav-center nav-actions">
-            
-            <a href="dashboard.html" style="color: var(--primary);">Dashboard</a>
-            <a href="index.html">Logout</a>
-            
-            <a href="login.html">Login</a>
-            <a href="signup.html" style="color: var(--primary);">Sign Up</a>
-            
+            {% if session.get('user_id') %}
+            <a href="{{ url_for('dashboard') }}" style="color: var(--primary);">Dashboard</a>
+            <a href="{{ url_for('logout') }}">Logout</a>
+            {% else %}
+            <a href="{{ url_for('login') }}">Login</a>
+            <a href="{{ url_for('signup') }}" style="color: var(--primary);">Sign Up</a>
+            {% endif %}
         </div>
     </nav>
 
@@ -467,7 +467,7 @@
         </div>
 
         <!-- <div id="diagonal-card" class="card-wrapper c1">
-            <img src="./static/workshop.jpg" alt="Student Profile" class="interactive-card">
+            <img src="{{ url_for('static', filename='workshop.jpg') }}" alt="Student Profile" class="interactive-card">
             <div class="card-meta">
                 <p class="card-label">Step 01</p>
                 <p class="card-title">STUDENT PROFILING</p>

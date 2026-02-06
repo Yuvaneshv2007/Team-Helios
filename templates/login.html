@@ -7,7 +7,7 @@
     <title>Login | CareerHub</title>
     <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <link rel="stylesheet" href="./static/style.css?v=login_v1">
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}?v=login_v1">
     <style>
         body {
             display: flex;
@@ -122,16 +122,16 @@
             <h1 class="auth-title">Welcome Back</h1>
             <p class="auth-subtitle">Login to access your student dashboard</p>
 
-            
-            
+            {% with messages = get_flashed_messages() %}
+            {% if messages %}
             <div
                 style="background: rgba(239, 68, 68, 0.2); color: #ef4444; padding: 0.8rem; border-radius: 8px; margin-bottom: 1.5rem; text-align: left; font-size: 0.9rem;">
-                Welcome to your dashboard!
+                {{ messages[0] }}
             </div>
-            
-            
+            {% endif %}
+            {% endwith %}
 
-            <form action="login.html" method="POST">
+            <form action="{{ url_for('login') }}" method="POST">
                 <div class="form-group">
                     <label for="email" class="form-label">Email Address</label>
                     <input type="email" id="email" name="email" class="form-input" placeholder="student@example.com"
@@ -146,7 +146,7 @@
             </form>
 
             <div class="auth-footer">
-                Don't have an account? <a href="signup.html">Sign Up</a>
+                Don't have an account? <a href="{{ url_for('signup') }}">Sign Up</a>
             </div>
         </div>
     </div>

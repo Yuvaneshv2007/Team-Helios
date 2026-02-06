@@ -1,83 +1,6 @@
-<!DOCTYPE html>
-<html lang="en">
+{% extends "base.html" %}
 
-<head>
-        <meta charset="UTF-8">
-        <meta name="viewport" content="width=device-width, initial-scale=1.0">
-        <title>CareerHub | Premium Student Analysis</title>
-        <!-- Google Fonts -->
-        <link rel="preconnect" href="https://fonts.googleapis.com">
-        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-        <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700&display=swap"
-                rel="stylesheet">
-        <!-- Font Awesome -->
-        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-        <!-- Custom CSS -->
-        <link rel="stylesheet" href="./static/style.css?v=mobile_v1">
-</head>
-
-<body>
-        <div class="app-container">
-                
-                <!-- Sidebar Navigation -->
-                <nav class="sidebar">
-                        <div class="logo">
-                                <i class="fa-solid fa-graduation-cap"></i> <span>CareerHub</span>
-                        </div>
-                        <ul class="nav-links">
-                                <li><a href="index.html" class="nav-item"><i class="fa-solid fa-home"></i>
-                                                Homepage</a></li>
-                                <li><a href="dashboard.html" class="nav-item"><i
-                                                        class="fa-solid fa-chart-pie"></i> Personal
-                                                Dashboard</a></li>
-
-                                <li><a href="career.html" class="nav-item"><i
-                                                        class="fa-solid fa-compass"></i> Career
-                                                Explorer</a></li>
-                                <li><a href="roadmap.html" class="nav-item"><i class="fa-solid fa-map"></i>
-                                                Roadmap
-                                                Builder</a></li>
-                                <li><a href="market.html" class="nav-item"><i class="fa-solid fa-globe"></i>
-                                                Booming skills with current trend</a></li>
-                                <li><a href="leetcode.html" class="nav-item"><i
-                                                        class="fa-solid fa-code"></i>
-                                                LeetCode Analysis</a></li>
-                                <li><a href="resume_builder.html" class="nav-item"><i
-                                                        class="fa-solid fa-file-invoice"></i>
-                                                Resume Builder</a></li>
-                                <li><a href="analysis.html" class="nav-item"><i
-                                                        class="fa-brands fa-github"></i>
-                                                GitHub Analysis</a></li>
-
-                                <!-- <li><a href="mentors.html" class="nav-item"><i
-                                                        class="fa-solid fa-users"></i> Mentor
-                                                Network</a></li> -->
-                                <!-- <li><a href="stories.html" class="nav-item"><i class="fa-solid fa-star"></i>
-                                                Success
-                                                Stories</a></li> -->
-                                <!-- <li><a href="institution.html" class="nav-item"><i
-                                                        class="fa-solid fa-university"></i>
-                                                Institution Portal</a></li> -->
-                                <!-- <li><a href="support.html" class="nav-item"><i
-                                                        class="fa-solid fa-headset"></i> Support
-                                                Center</a></li> -->
-                        </ul>
-                        <div class="user-info">
-                                
-                                <div class="avatar">A</div>
-                                <div class="details">
-                                        <span class="name">Alex User</span>
-                                        <a href="index.html"
-                                                style="color: var(--secondary); font-size: 0.8rem; text-decoration: none;">Logout</a>
-                                </div>
-                                
-                        </div>
-                </nav>
-                
-
-                <!-- Main Content -->
-                <main class="main-content">
-                        
+{% block content %}
 <div class="dashboard-header">
     <h1><i class="fa-solid fa-file-invoice"></i> Resume Builder</h1>
     <p>Create a professional resume in seconds. Enter your details below.</p>
@@ -85,41 +8,41 @@
 
 <div class="content-grid" style="grid-template-columns: 1fr; max-width: 800px; margin: 0 auto;">
     <div class="glass-card">
-        <form action="#" method="POST" class="resume-form">
+        <form action="{{ url_for('generate_resume') }}" method="POST" class="resume-form">
             <div class="form-group">
                 <label for="full_name">Full Name</label>
                 <input type="text" id="full_name" name="full_name" placeholder="e.g. John Doe" required
-                    value="">
+                    value="{{ resume_data.get('full_name', session.get('user_name', '')) }}">
             </div>
 
             <div class="form-group">
                 <label for="institute_name">Institute / University Name</label>
                 <input type="text" id="institute_name" name="institute_name"
                     placeholder="e.g. Massachusetts Institute of Technology" required
-                    value="">
+                    value="{{ resume_data.get('institute_name', '') }}">
             </div>
 
             <div class="form-group">
                 <label for="degree">Degree</label>
                 <select id="degree" name="degree"
                     style="width: 100%; padding: 0.8rem 1rem; border-radius: 8px; background: rgba(255, 255, 255, 0.05); border: 1px solid rgba(255, 255, 255, 0.1); color: var(--text-primary); font-family: 'Outfit', sans-serif; font-size: 1rem;">
-                    <option value="" disabled selected>Select your
+                    <option value="" disabled {% if not resume_data.get('degree') %}selected{% endif %}>Select your
                         degree</option>
-                    <option value="B.E." selected>B.E. (Bachelor of
+                    <option value="B.E." {% if resume_data.get('degree')=='B.E.' %}selected{% endif %}>B.E. (Bachelor of
                         Engineering)</option>
-                    <option value="B.Tech" selected>B.Tech
+                    <option value="B.Tech" {% if resume_data.get('degree')=='B.Tech' %}selected{% endif %}>B.Tech
                         (Bachelor of Technology)</option>
-                    <option value="B.Sc" selected>B.Sc (Bachelor of
+                    <option value="B.Sc" {% if resume_data.get('degree')=='B.Sc' %}selected{% endif %}>B.Sc (Bachelor of
                         Science)</option>
-                    <option value="M.E." selected>M.E. (Master of
+                    <option value="M.E." {% if resume_data.get('degree')=='M.E.' %}selected{% endif %}>M.E. (Master of
                         Engineering)</option>
-                    <option value="M.Tech" selected>M.Tech
+                    <option value="M.Tech" {% if resume_data.get('degree')=='M.Tech' %}selected{% endif %}>M.Tech
                         (Master of Technology)</option>
-                    <option value="M.Sc" selected>M.Sc (Master of
+                    <option value="M.Sc" {% if resume_data.get('degree')=='M.Sc' %}selected{% endif %}>M.Sc (Master of
                         Science)</option>
-                    <option value="BCA" selected>BCA (Bachelor of
+                    <option value="BCA" {% if resume_data.get('degree')=='BCA' %}selected{% endif %}>BCA (Bachelor of
                         Computer Applications)</option>
-                    <option value="MCA" selected>MCA (Master of
+                    <option value="MCA" {% if resume_data.get('degree')=='MCA' %}selected{% endif %}>MCA (Master of
                         Computer Applications)</option>
                 </select>
                 <style>
@@ -138,7 +61,7 @@
                     <div class="input-icon-wrapper">
                         <i class="fa-brands fa-github input-icon"></i>
                         <input type="text" id="github_id" name="github_id" placeholder="e.g. johndoe123" required
-                            value="">
+                            value="{{ resume_data.get('github_id', '') }}">
                     </div>
                 </div>
                 <div class="form-group">
@@ -146,7 +69,7 @@
                     <div class="input-icon-wrapper">
                         <i class="fa-solid fa-code input-icon"></i>
                         <input type="text" id="leetcode_id" name="leetcode_id" placeholder="e.g. johndoe_leet" required
-                            value="">
+                            value="{{ resume_data.get('leetcode_id', '') }}">
                     </div>
                 </div>
             </div>
@@ -155,7 +78,7 @@
                 <label for="skills">Skills (Comma separated)</label>
                 <input type="text" id="skills" name="skills"
                     placeholder="e.g. Python, Flask, React, Data Structures, Machine Learning" required
-                    value="">
+                    value="{{ resume_data.get('skills', '') }}">
                 <small style="color: rgba(255,255,255,0.6); display: block; margin-top: 0.5rem;">List your top technical
                     skills separated by commas.</small>
             </div>
@@ -164,14 +87,14 @@
                 <label for="specialization">Specialization / Field of Interest</label>
                 <input type="text" id="specialization" name="specialization"
                     placeholder="e.g. Full Stack Development, Data Science, Embedded Systems" required
-                    value="">
+                    value="{{ resume_data.get('specialization', '') }}">
             </div>
 
             <div class="form-group">
                 <label for="summary">Professional Summary (Optional)</label>
                 <textarea id="summary" name="summary" rows="3"
                     placeholder="Write a brief professional summary about yourself..."
-                    style="width: 100%; padding: 0.8rem; background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.1); color: white; border-radius: 8px; font-family: inherit;"></textarea>
+                    style="width: 100%; padding: 0.8rem; background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.1); color: white; border-radius: 8px; font-family: inherit;">{{ resume_data.get('summary', '') }}</textarea>
                 <small style="color: rgba(255,255,255,0.6); display: block; margin-top: 0.5rem;">Leave blank to use the
                     default AI-generated summary.</small>
             </div>
@@ -185,24 +108,24 @@
                     <i class="fa-solid fa-laptop-code"></i> Projects
                 </label>
                 <div id="projects-container">
-                    
-                    
+                    {% if resume_data.get('projects') %}
+                    {% for project in resume_data.get('projects') %}
                     <div class="project-entry"
                         style="background: rgba(255,255,255,0.03); padding: 1rem; border-radius: 8px; margin-bottom: 1rem;">
-                        <input type="text" name="project_title" placeholder="Project Title" value=""
+                        <input type="text" name="project_title" placeholder="Project Title" value="{{ project.title }}"
                             style="width: 100%; padding: 0.8rem 1rem; border-radius: 8px; background: rgba(255, 255, 255, 0.05); border: 1px solid rgba(255, 255, 255, 0.1); color: var(--text-primary); font-family: 'Outfit', sans-serif; font-size: 1rem; margin-bottom: 0.5rem;">
                         <textarea name="project_desc" placeholder="Project Description (Short summary of what it does)"
                             rows="3"
-                            style="width: 100%; padding: 0.8rem; background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.1); color: white; border-radius: 8px; font-family: inherit; margin-bottom: 0.5rem;"></textarea>
+                            style="width: 100%; padding: 0.8rem; background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.1); color: white; border-radius: 8px; font-family: inherit; margin-bottom: 0.5rem;">{{ project.desc }}</textarea>
                         <input type="text" name="project_link" placeholder="GitHub/Project Link (Optional)"
-                            value=""
+                            value="{{ project.link }}"
                             style="width: 100%; padding: 0.8rem 1rem; border-radius: 8px; background: rgba(255, 255, 255, 0.05); border: 1px solid rgba(255, 255, 255, 0.1); color: var(--text-primary); font-family: 'Outfit', sans-serif; font-size: 1rem; margin-bottom: 0;">
                         <button type="button" onclick="this.parentElement.remove()"
                             style="background: none; border: none; color: #ff6b6b; cursor: pointer; margin-top: 0.5rem; font-size: 0.9rem;"><i
                                 class="fa-solid fa-trash"></i> Remove Project</button>
                     </div>
-                    
-                    
+                    {% endfor %}
+                    {% else %}
                     <!-- Default Empty Project Entry -->
                     <div class="project-entry"
                         style="background: rgba(255,255,255,0.03); padding: 1rem; border-radius: 8px; margin-bottom: 1rem;">
@@ -214,7 +137,7 @@
                         <input type="text" name="project_link" placeholder="GitHub/Project Link (Optional)"
                             style="width: 100%; padding: 0.8rem 1rem; border-radius: 8px; background: rgba(255, 255, 255, 0.05); border: 1px solid rgba(255, 255, 255, 0.1); color: var(--text-primary); font-family: 'Outfit', sans-serif; font-size: 1rem; margin-bottom: 0;">
                     </div>
-                    
+                    {% endif %}
                 </div>
                 <button type="button" id="add-project-btn" class="btn"
                     style="background: rgba(255,255,255,0.1); font-size: 0.9rem; padding: 0.5rem 1rem; margin-top: 0.5rem;">
@@ -230,7 +153,7 @@
                 </label>
                 <textarea id="achievements" name="achievements" rows="5"
                     placeholder="• Won 1st place in Hackathon 2024&#10;• Solved 500+ problems on LeetCode&#10;• Dean's List for Academic Excellence"
-                    style="width: 100%; padding: 0.8rem; background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.1); color: white; border-radius: 8px; font-family: inherit;"></textarea>
+                    style="width: 100%; padding: 0.8rem; background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.1); color: white; border-radius: 8px; font-family: inherit;">{{ resume_data.get('achievements', '') }}</textarea>
                 <small style="color: rgba(255,255,255,0.6); display: block; margin-top: 0.5rem;">Enter each achievement
                     on a new line.</small>
             </div>
@@ -312,186 +235,4 @@
         }
     });
 </script>
-
-                </main>
-        </div>
-
-        <!-- Chatbot Floating UI -->
-        <div id="chatbot-container" style="z-index: 10000;">
-                <!-- Toggle Button -->
-                <button id="chat-toggle-btn" onclick="toggleChat()"
-                        style="position: fixed; bottom: 30px; right: 30px; width: 60px; height: 60px; border-radius: 50%; background: linear-gradient(135deg, var(--primary), var(--secondary)); border: none; color: white; font-size: 1.5rem; cursor: pointer; box-shadow: 0 4px 15px rgba(99, 102, 241, 0.4); transition: transform 0.3s ease; display: flex; align-items: center; justify-content: center;">
-                        <i class="fa-solid fa-robot"></i>
-                </button>
-
-                <!-- Chat Window -->
-                <div id="chat-window"
-                        style="position: fixed; bottom: 100px; right: 30px; width: 400px; height: 600px; background: rgba(15, 23, 42, 0.95); backdrop-filter: blur(12px); -webkit-backdrop-filter: blur(12px); border: 1px solid rgba(255,255,255,0.1); border-radius: 16px; box-shadow: 0 10px 40px rgba(0,0,0,0.4); display: none; flex-direction: column; overflow: hidden; transform-origin: bottom right; transition: all 0.3s cubic-bezier(0.19, 1, 0.22, 1);">
-
-                        <!-- Header -->
-                        <div
-                                style="background: rgba(255,255,255,0.05); padding: 1rem; display: flex; align-items: center; justify-content: space-between; border-bottom: 1px solid rgba(255,255,255,0.05);">
-                                <div style="display: flex; align-items: center; gap: 10px;">
-                                        <div
-                                                style="background: rgba(16, 185, 129, 0.2); width: 32px; height: 32px; border-radius: 50%; display: flex; align-items: center; justify-content: center; color: #10b981;">
-                                                <i class="fa-solid fa-robot" style="font-size: 0.9rem;"></i>
-                                        </div>
-                                        <div>
-                                                <h4 style="font-size: 1rem; margin: 0; color: white;">EduBot AI</h4>
-                                                <span style="font-size: 0.7rem; color: #10b981;">● Online</span>
-                                        </div>
-                                </div>
-                                <button onclick="toggleChat()"
-                                        style="background: none; border: none; color: var(--text-muted); cursor: pointer; font-size: 1.1rem;">
-                                        <i class="fa-solid fa-times"></i>
-                                </button>
-                        </div>
-
-                        <!-- Messages Area -->
-                        <div id="chat-messages"
-                                style="flex: 1; padding: 1rem; overflow-y: auto; display: flex; flex-direction: column; gap: 1rem;">
-                                <div class="message bot"
-                                        style="background: rgba(255,255,255,0.05); align-self: flex-start; max-width: 80%; padding: 0.6rem 0.8rem; border-radius: 12px 12px 12px 0; font-size: 0.9rem; color: #e2e8f0;">
-                                        Hi Alex! 👋 I'm your AI mentor. Ask me
-                                        anything about your skills, career path, or coursework!
-                                </div>
-                        </div>
-
-                        <!-- Input Area -->
-                        <div
-                                style="padding: 1rem; background: rgba(0,0,0,0.2); border-top: 1px solid rgba(255,255,255,0.05);">
-                                <form id="chat-form" onsubmit="sendChatMessage(event)"
-                                        style="display: flex; gap: 0.5rem;">
-                                        <input type="text" id="chat-input" placeholder="Ask about projects, skills..."
-                                                required
-                                                style="flex: 1; background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.1); border-radius: 20px; padding: 0.6rem 1rem; color: white; font-size: 0.9rem; outline: none;">
-                                        <button type="submit"
-                                                style="background: var(--primary); border: none; border-radius: 50%; width: 36px; height: 36px; display: flex; align-items: center; justify-content: center; color: white; cursor: pointer;">
-                                                <i class="fa-solid fa-paper-plane" style="font-size: 0.8rem;"></i>
-                                        </button>
-                                </form>
-                        </div>
-                </div>
-        </div>
-
-        <script>
-                let chatOpen = false;
-                let chatHistory = [];
-
-                function toggleChat() {
-                        const win = document.getElementById('chat-window');
-                        const icon = document.querySelector('#chat-toggle-btn i');
-
-                        chatOpen = !chatOpen;
-                        if (chatOpen) {
-                                win.style.display = 'flex';
-                                icon.classList.remove('fa-robot');
-                                icon.classList.add('fa-chevron-down');
-                                setTimeout(() => document.getElementById('chat-input').focus(), 100);
-                        } else {
-                                win.style.display = 'none';
-                                icon.classList.remove('fa-chevron-down');
-                                icon.classList.add('fa-robot');
-                        }
-                }
-
-                async function sendChatMessage(e) {
-                        e.preventDefault();
-                        const input = document.getElementById('chat-input');
-                        const msg = input.value.trim();
-                        if (!msg) return;
-
-                        // 1. Add User Message
-                        addMessage(msg, 'user');
-                        input.value = '';
-                        input.disabled = true;
-
-                        // Add to history
-                        chatHistory.push({ role: "user", content: msg });
-
-                        // 2. Show Loading
-                        const loaderId = addLoader();
-
-                        try {
-                                const response = await fetch('/api/chat', {
-                                        method: 'POST',
-                                        headers: { 'Content-Type': 'application/json' },
-                                        body: JSON.stringify({
-                                                message: msg,
-                                                history: chatHistory
-                                        })
-                                });
-
-                                const data = await response.json();
-                                removeLoader(loaderId);
-
-                                if (data.reply) {
-                                        addMessage(data.reply, 'bot');
-                                        chatHistory.push({ role: "assistant", content: data.reply });
-                                } else {
-                                        addMessage("Sorry, I encountered an error. Please try again.", 'bot');
-                                }
-
-                        } catch (err) {
-                                removeLoader(loaderId);
-                                console.error(err);
-                                addMessage("Network error. Please try again.", 'bot');
-                        } finally {
-                                input.disabled = false;
-                                input.focus();
-                        }
-                }
-
-                function addMessage(text, sender) {
-                        const container = document.getElementById('chat-messages');
-                        const div = document.createElement('div');
-
-                        // Styles remain same but we add 'markdown-content' class concept via inline styles
-                        const baseStyle = "max-width: 85%; padding: 0.8rem 1rem; font-size: 0.95rem; line-height: 1.5; word-wrap: break-word; box-shadow: 0 2px 5px rgba(0,0,0,0.1);";
-                        const userStyle = "background: var(--primary); color: white; align-self: flex-end; border-radius: 12px 12px 0 12px;";
-                        const botStyle = "background: rgba(255,255,255,0.1); color: #e2e8f0; align-self: flex-start; border-radius: 12px 12px 12px 0;";
-
-                        div.style.cssText = baseStyle + (sender === 'user' ? userStyle : botStyle);
-
-                        // Simple Markdown Parser
-                        if (sender === 'bot') {
-                                let formatted = text
-                                        // Bold **text**
-                                        .replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>')
-                                        // Italic *text*
-                                        .replace(/\*(.*?)\*/g, '<em>$1</em>')
-                                        // Code blocks `text`
-                                        .replace(/`(.*?)`/g, '<code style="background:rgba(0,0,0,0.3); padding:2px 4px; border-radius:4px; font-family:monospace;">$1</code>')
-                                        // Lists - (must start at new line)
-                                        .replace(/^- (.*$)/gim, '<li>$1</li>')
-                                        // Line breaks to <br>
-                                        .replace(/\n/g, '<br>');
-
-                                div.innerHTML = formatted;
-                        } else {
-                                div.innerText = text;
-                        }
-
-                        container.appendChild(div);
-                        container.scrollTop = container.scrollHeight;
-                }
-
-                function addLoader() {
-                        const container = document.getElementById('chat-messages');
-                        const div = document.createElement('div');
-                        div.id = 'chat-loader';
-                        div.style.cssText = "align-self: flex-start; padding: 0.5rem 1rem; background: rgba(255,255,255,0.05); border-radius: 12px; color: var(--text-muted); font-size: 0.8rem;";
-                        div.innerHTML = '<i class="fa-solid fa-circle-notch fa-spin"></i> Thinking...';
-                        container.appendChild(div);
-                        container.scrollTop = container.scrollHeight;
-                        return div.id;
-                }
-
-                function removeLoader(id) {
-                        const el = document.getElementById(id);
-                        if (el) el.remove();
-                }
-        </script>
-</body>
-
-</html>
+{% endblock %}

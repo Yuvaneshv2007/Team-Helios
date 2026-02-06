@@ -4,7 +4,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title> - Resume</title>
+    <title>{{ data.full_name }} - Resume</title>
     <!-- Google Fonts for Professional Look -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -244,7 +244,7 @@
 <body>
 
     <div class="controls">
-        <a href="resume_builder.html" class="btn btn-back">
+        <a href="{{ url_for('resume_builder') }}" class="btn btn-back">
             <i class="fa-solid fa-arrow-left"></i> Edit
         </a>
         <button onclick="window.print()" class="btn">
@@ -256,47 +256,48 @@
         <header>
             <div class="header-top">
                 <div class="header-content">
-                    <h1></h1>
-                    <p class="role-title"></p>
+                    <h1>{{ data.full_name }}</h1>
+                    <p class="role-title">{{ data.specialization if data.specialization else 'Software Engineer' }}</p>
                 </div>
                 <div class="contact-info">
-                    
+                    {% if data.email %}
                     <div class="contact-item">
-                        <span></span> <i class="fa-solid fa-envelope"></i>
+                        <span>{{ data.email }}</span> <i class="fa-solid fa-envelope"></i>
                     </div>
-                    
+                    {% endif %}
                     <div class="contact-item">
-                        <span></span> <i class="fa-solid fa-graduation-cap"></i>
+                        <span>{{ data.institute_name }}</span> <i class="fa-solid fa-graduation-cap"></i>
                     </div>
 
                     <!-- Github and LeetCode moved near Gmail as requested -->
-                    
+                    {% if data.github_url %}
                     <div class="contact-item">
-                        <a href="" target="_blank">
+                        <a href="{{ data.github_url }}" target="_blank">
                             <span>GitHub</span>
                         </a>
                         <i class="fa-brands fa-github"></i>
                     </div>
-                    
+                    {% endif %}
 
-                    
+                    {% if data.leetcode_url %}
                     <div class="contact-item">
-                        <a href="" target="_blank">
+                        <a href="{{ data.leetcode_url }}" target="_blank">
                             <span>LeetCode</span>
                         </a>
                         <i class="fa-solid fa-code"></i>
                     </div>
-                    
+                    {% endif %}
                 </div>
             </div>
 
             <div class="header-summary">
                 <p>
-                    Motivated and detail-oriented computer science student from <strong></strong>.
+                    Motivated and detail-oriented computer science student from <strong>{{ data.institute_name
+                        }}</strong>.
                     Proficient in software development and data structures, with a passion for building efficient
                     solutions.
                     Active problem solver on LeetCode and contributor on GitHub.
-                    Skilled in ,
+                    Skilled in {{ data.skills_list[:3] | join(', ') if data.skills_list else 'modern technologies' }},
                     eager to contribute to challenging engineering projects.
                 </p>
             </div>
@@ -306,8 +307,8 @@
             <div class="section-title">Education</div>
             <div class="entry">
                 <div class="entry-main">
-                    <div class="entry-title"></div>
-                    <div class="entry-subtitle"></div>
+                    <div class="entry-title">{{ data.institute_name }}</div>
+                    <div class="entry-subtitle">{{ data.degree if data.degree else 'Student' }}</div>
                 </div>
             </div>
         </section>
@@ -316,45 +317,45 @@
             <div class="section-title">Technical Skills</div>
             <!-- Skills in Points Format -->
             <ul class="skills-list">
-                
-                <li></li>
-                
+                {% for skill in data.skills_list %}
+                <li>{{ skill }}</li>
+                {% endfor %}
             </ul>
         </section>
 
-        
+        {% if data.projects %}
         <section>
             <div class="section-title">Projects</div>
-            
+            {% for project in data.projects %}
             <div class="entry" style="margin-bottom: 1rem; display: block;">
                 <!-- Changed to block for proper stacking -->
                 <div class="entry-main">
                     <div style="display: flex; align-items: center; justify-content: space-between;">
-                        <span class="entry-title"></span>
-                        
-                        <a href="" target="_blank"
+                        <span class="entry-title">{{ project.title }}</span>
+                        {% if project.link %}
+                        <a href="{{ project.link }}" target="_blank"
                             style="font-size: 0.85rem; color: var(--accent-color); text-decoration: none;">
                             <i class="fa-brands fa-github"></i> View Project
                         </a>
-                        
+                        {% endif %}
                     </div>
-                    <p style="font-size: 0.9rem; color: #444; margin-top: 0.2rem;"></p>
+                    <p style="font-size: 0.9rem; color: #444; margin-top: 0.2rem;">{{ project.desc }}</p>
                 </div>
             </div>
-            
+            {% endfor %}
         </section>
-        
+        {% endif %}
 
-        
+        {% if data.achievements %}
         <section>
             <div class="section-title">Achievements</div>
             <ul class="skills-list" style="columns: 1;"> <!-- Single column for achievements usually looks better -->
-                
-                <li style="margin-bottom: 0.4rem;"></li>
-                
+                {% for achievement in data.achievements %}
+                <li style="margin-bottom: 0.4rem;">{{ achievement }}</li>
+                {% endfor %}
             </ul>
         </section>
-        
+        {% endif %}
         </section>
 
     </div>
@@ -363,7 +364,7 @@
         <button onclick="window.print()"
             style="padding: 10px 20px; background: #333; color: white; border: none; border-radius: 5px; cursor: pointer;">Download
             PDF</button>
-        <button onclick="window.location.href='dashboard.html'"
+        <button onclick="window.location.href='{{ url_for('dashboard') }}'"
             style="padding: 10px 20px; background: #6366f1; color: white; border: none; border-radius: 5px; cursor: pointer;">Go
             to Dashboard</button>
     </div>
@@ -378,7 +379,7 @@
 
         // Redirect after print dialog is closed (Save or Cancel)
         window.onafterprint = function () {
-            window.location.href = "dashboard.html";
+            window.location.href = "{{ url_for('dashboard') }}";
         };
     </script>
 </body>
