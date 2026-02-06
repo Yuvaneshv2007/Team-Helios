@@ -1,0 +1,386 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title> - Resume</title>
+    <!-- Google Fonts for Professional Look -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap"
+        rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+    <style>
+        :root {
+            --primary-color: #2c3e50;
+            --accent-color: #3498db;
+            --text-color: #333;
+            --light-gray: #f4f4f4;
+            --border-color: #e0e0e0;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #555;
+            color: var(--text-color);
+            line-height: 1.6;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            min-height: 100vh;
+            padding: 2rem 0;
+        }
+
+        /* A4 Page Styles */
+        .page {
+            background: white;
+            width: 210mm;
+            /* Height optimization for single page */
+            height: 297mm;
+            min-height: 297mm;
+            padding: 12mm 15mm;
+            /* Reduced padding */
+            box-shadow: 0 0 20px rgba(0, 0, 0, 0.3);
+            position: relative;
+            overflow: hidden;
+            /* Stop spillover */
+        }
+
+        /* Compact Header */
+        header {
+            border-bottom: 2px solid var(--primary-color);
+            padding-bottom: 0.8rem;
+            margin-bottom: 1.2rem;
+        }
+
+        .header-content h1 {
+            font-size: 2rem;
+            /* Smaller Title */
+            margin-bottom: 0;
+        }
+
+        /* Compact Sections */
+        section {
+            margin-bottom: 1rem;
+            border-bottom: 2px solid var(--primary-color);
+            padding-bottom: 0.5rem;
+        }
+
+        .section-title {
+            font-size: 1.15rem;
+            /* Bolder size */
+            text-transform: uppercase;
+            color: #000;
+            /* Bolder color */
+            font-weight: 800;
+            /* Extra Bold */
+            margin-bottom: 0.5rem;
+            padding-bottom: 0.1rem;
+            letter-spacing: 0.5px;
+        }
+
+        p,
+        .entry-subtitle,
+        .entry-date,
+        li {
+            font-size: 0.85rem !important;
+            /* Global compact text */
+        }
+
+        .skills-list li {
+            margin-bottom: 0.1rem;
+        }
+
+        /* RE-INSERTED MISSING STYLES */
+        .header-top {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            margin-bottom: 0.5rem;
+        }
+
+        .header-summary {
+            margin-top: 0.5rem;
+            color: #444;
+            font-size: 0.85rem;
+            line-height: 1.4;
+        }
+
+        .header-content p.role-title {
+            font-size: 1.5em;
+            color: var(--accent-color);
+            font-weight: 700;
+        }
+
+        .contact-info {
+            text-align: right;
+            font-size: 0.85rem;
+            color: #555;
+        }
+
+        .contact-item {
+            display: flex;
+            align-items: center;
+            justify-content: flex-end;
+            gap: 0.5rem;
+            margin-bottom: 0.2rem;
+        }
+
+        .contact-item a {
+            color: inherit;
+            text-decoration: none;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .entry {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 0.5rem;
+        }
+
+        .entry-main {
+            flex: 1;
+        }
+
+        .entry-title {
+            font-weight: 700;
+            font-size: 0.95rem;
+        }
+
+        .entry-subtitle {
+            font-style: italic;
+            color: #666;
+            font-size: 0.85rem;
+        }
+
+        .entry-date {
+            font-weight: 500;
+            color: #666;
+            font-size: 0.85rem;
+            white-space: nowrap;
+            margin-left: 1rem;
+        }
+
+        .skills-list {
+            list-style-type: disc;
+            margin-left: 1.5rem;
+            columns: 2;
+        }
+
+        .skills-list li {
+            margin-bottom: 0.2rem;
+            font-weight: 500;
+            color: #444;
+            font-size: 0.85rem;
+        }
+
+        /* Controls */
+        .controls {
+            position: fixed;
+            bottom: 2rem;
+            right: 2rem;
+            display: flex;
+            gap: 1rem;
+            z-index: 1000;
+        }
+
+        .btn {
+            background: var(--accent-color);
+            color: white;
+            border: none;
+            padding: 0.8rem 1.5rem;
+            border-radius: 50px;
+            font-family: inherit;
+            font-weight: 600;
+            cursor: pointer;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .btn-back {
+            background: #666;
+        }
+
+        /* Print Override */
+        @media print {
+            body {
+                background: none;
+                padding: 0;
+            }
+
+            .page {
+                width: 100%;
+                height: 100vh;
+                box-shadow: none;
+                padding: 10mm;
+                margin: 0;
+                overflow: hidden;
+            }
+
+            .controls {
+                display: none !important;
+            }
+
+            @page {
+                size: A4;
+                margin: 0;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+    <div class="controls">
+        <a href="resume_builder.html" class="btn btn-back">
+            <i class="fa-solid fa-arrow-left"></i> Edit
+        </a>
+        <button onclick="window.print()" class="btn">
+            <i class="fa-solid fa-download"></i> Download PDF
+        </button>
+    </div>
+
+    <div class="page">
+        <header>
+            <div class="header-top">
+                <div class="header-content">
+                    <h1></h1>
+                    <p class="role-title"></p>
+                </div>
+                <div class="contact-info">
+                    
+                    <div class="contact-item">
+                        <span></span> <i class="fa-solid fa-envelope"></i>
+                    </div>
+                    
+                    <div class="contact-item">
+                        <span></span> <i class="fa-solid fa-graduation-cap"></i>
+                    </div>
+
+                    <!-- Github and LeetCode moved near Gmail as requested -->
+                    
+                    <div class="contact-item">
+                        <a href="" target="_blank">
+                            <span>GitHub</span>
+                        </a>
+                        <i class="fa-brands fa-github"></i>
+                    </div>
+                    
+
+                    
+                    <div class="contact-item">
+                        <a href="" target="_blank">
+                            <span>LeetCode</span>
+                        </a>
+                        <i class="fa-solid fa-code"></i>
+                    </div>
+                    
+                </div>
+            </div>
+
+            <div class="header-summary">
+                <p>
+                    Motivated and detail-oriented computer science student from <strong></strong>.
+                    Proficient in software development and data structures, with a passion for building efficient
+                    solutions.
+                    Active problem solver on LeetCode and contributor on GitHub.
+                    Skilled in ,
+                    eager to contribute to challenging engineering projects.
+                </p>
+            </div>
+        </header>
+
+        <section>
+            <div class="section-title">Education</div>
+            <div class="entry">
+                <div class="entry-main">
+                    <div class="entry-title"></div>
+                    <div class="entry-subtitle"></div>
+                </div>
+            </div>
+        </section>
+
+        <section>
+            <div class="section-title">Technical Skills</div>
+            <!-- Skills in Points Format -->
+            <ul class="skills-list">
+                
+                <li></li>
+                
+            </ul>
+        </section>
+
+        
+        <section>
+            <div class="section-title">Projects</div>
+            
+            <div class="entry" style="margin-bottom: 1rem; display: block;">
+                <!-- Changed to block for proper stacking -->
+                <div class="entry-main">
+                    <div style="display: flex; align-items: center; justify-content: space-between;">
+                        <span class="entry-title"></span>
+                        
+                        <a href="" target="_blank"
+                            style="font-size: 0.85rem; color: var(--accent-color); text-decoration: none;">
+                            <i class="fa-brands fa-github"></i> View Project
+                        </a>
+                        
+                    </div>
+                    <p style="font-size: 0.9rem; color: #444; margin-top: 0.2rem;"></p>
+                </div>
+            </div>
+            
+        </section>
+        
+
+        
+        <section>
+            <div class="section-title">Achievements</div>
+            <ul class="skills-list" style="columns: 1;"> <!-- Single column for achievements usually looks better -->
+                
+                <li style="margin-bottom: 0.4rem;"></li>
+                
+            </ul>
+        </section>
+        
+        </section>
+
+    </div>
+
+    <div class="no-print" style="position: fixed; bottom: 20px; right: 20px; display: flex; gap: 10px;">
+        <button onclick="window.print()"
+            style="padding: 10px 20px; background: #333; color: white; border: none; border-radius: 5px; cursor: pointer;">Download
+            PDF</button>
+        <button onclick="window.location.href='dashboard.html'"
+            style="padding: 10px 20px; background: #6366f1; color: white; border: none; border-radius: 5px; cursor: pointer;">Go
+            to Dashboard</button>
+    </div>
+
+    <script>
+        window.onload = function () {
+            // Trigger print dialog automatically
+            setTimeout(function () {
+                window.print();
+            }, 500);
+        };
+
+        // Redirect after print dialog is closed (Save or Cancel)
+        window.onafterprint = function () {
+            window.location.href = "dashboard.html";
+        };
+    </script>
+</body>
+
+</html>

@@ -1,0 +1,656 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CareerHub AI | Navigate Your Career</title>
+
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@900&family=Inter:wght@300;900&display=swap"
+        rel="stylesheet">
+    <!-- FontAwesome for consistency if needed -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/ScrollTrigger.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/gh/studio-freight/lenis@1.0.19/bundled/lenis.min.js"></script>
+
+    <style>
+        :root {
+            color-scheme: dark;
+            background-color: transparent;
+            --primary: #dc2626;
+        }
+
+        body {
+            margin: 0;
+            padding: 0;
+            font-family: 'Inter', sans-serif;
+            background-color: #000;
+            /* Fallback */
+            color: #fff;
+            overflow-x: hidden;
+        }
+
+        /* --- BACKGROUND VIDEO --- */
+        .fixed-bg-video {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            opacity: 0.6;
+            z-index: -1;
+            pointer-events: none;
+            background-color: #000;
+        }
+
+        /* --- NAVIGATION --- */
+        .nav-bar {
+            position: fixed;
+            top: 0;
+            width: 100%;
+            padding: 2.4rem 3rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            z-index: 100;
+            box-sizing: border-box;
+            background: linear-gradient(to bottom, rgba(0, 0, 0, 0.8), transparent);
+        }
+
+
+        .logo-circle {
+            width: 60px;
+            height: 60px;
+            border-radius: 50%;
+            overflow: hidden;
+            border: 2px solid var(--primary);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: transparent;
+            cursor: pointer;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+
+        .logo-circle:hover {
+            transform: scale(1.1);
+            box-shadow: 0 0 15px rgba(220, 38, 38, 0.5);
+        }
+
+        .nav-center {
+            display: flex;
+            gap: 3rem;
+            font-size: 0.75rem;
+            text-transform: uppercase;
+            letter-spacing: 0.2em;
+            font-weight: bold;
+        }
+
+        .nav-center a {
+            color: white;
+            text-decoration: none;
+            transition: color 0.3s;
+            cursor: pointer;
+        }
+
+        .nav-center a:hover {
+            color: var(--primary);
+        }
+
+        .nav-actions {
+            display: flex;
+            gap: 2rem;
+        }
+
+        /* --- HERO SECTION --- */
+        .hero-section {
+            height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            position: relative;
+            overflow: hidden;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .hero-title {
+            font-family: 'Orbitron', sans-serif;
+            font-size: 13vw;
+            font-weight: 900;
+            font-style: italic;
+            line-height: 1;
+            letter-spacing: -0.05em;
+            margin: 0;
+            z-index: 10;
+            text-transform: uppercase;
+        }
+
+        .hero-sub {
+            color: var(--primary);
+            letter-spacing: 1.5em;
+            font-size: 0.65rem;
+            text-transform: uppercase;
+            margin-top: 1rem;
+            z-index: 10;
+        }
+
+        /* --- MASKS --- */
+        .mask {
+            position: absolute;
+            top: 0;
+            height: 100%;
+            pointer-events: none;
+            transform: skewX(-12deg);
+            transform-origin: bottom;
+            z-index: 20;
+        }
+
+        .mask span {
+            position: absolute;
+            left: 0;
+            width: 100%;
+            height: 0%;
+            background: #000;
+        }
+
+        .m1 {
+            left: -15%;
+            width: 35%;
+        }
+
+        .m2 {
+            left: 15%;
+            width: 40%;
+        }
+
+        .m3 {
+            left: 45%;
+            width: 40%;
+        }
+
+        .m4 {
+            left: 75%;
+            width: 35%;
+        }
+
+        .mask span:nth-child(1) {
+            bottom: 40%;
+        }
+
+        .mask span:nth-child(2) {
+            bottom: 0%;
+        }
+
+        .mask span:nth-child(3) {
+            bottom: 70%;
+        }
+
+        /* --- WORKSHOPS SECTION --- */
+        .technical-grid {
+            position: relative;
+            min-height: 160vh;
+            display: flex;
+            padding: 10rem 5rem;
+            overflow: hidden;
+        }
+
+        .sticky-text {
+            position: sticky;
+            top: 25%;
+            width: 35%;
+            z-index: 5;
+            height: fit-content;
+        }
+
+        .newses {
+            font-size: 6rem;
+            font-weight: 900;
+            line-height: 1;
+            color: rgba(220, 38, 38, 0.8);
+            white-space: nowrap;
+            z-index: 50;
+            margin-bottom: 2rem;
+            display: block;
+        }
+
+        .vision-main {
+            font-size: 2.25rem;
+            font-weight: 300;
+            line-height: 1.2;
+        }
+
+        .vision-main span {
+            font-weight: 900;
+            font-style: italic;
+            color: var(--primary);
+        }
+
+        .card-wrapper.c1 {
+            position: absolute;
+            right: 10%;
+            top: 45%;
+            width: 380px;
+            z-index: 60;
+        }
+
+        .interactive-card {
+            width: 100%;
+            border-radius: 4px;
+            border: 1px solid rgba(220, 38, 38, 0.3);
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.6);
+        }
+
+        .card-meta {
+            margin-top: 1rem;
+            border-left: 2px solid var(--primary);
+            padding-left: 1rem;
+        }
+
+        .card-label {
+            font-size: 10px;
+            font-weight: bold;
+            color: var(--primary);
+            text-transform: uppercase;
+        }
+
+        .card-title {
+            font-size: 1.25rem;
+            font-weight: bold;
+        }
+
+        /* --- IMMERSIVE WRAPPER --- */
+        #immersive-wrapper {
+            position: relative;
+            width: 100vw;
+            height: 100vh;
+            overflow: hidden;
+        }
+
+        .imm-section {
+            position: absolute;
+            inset: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            visibility: hidden;
+            opacity: 0;
+            transition: opacity 0.5s ease;
+        }
+
+        .split-layout {
+            display: flex;
+            align-items: center;
+            gap: 4rem;
+            width: 85%;
+            max-width: 1200px;
+        }
+
+        .split-image {
+            width: 100%;
+            max-width: 500px;
+            border-radius: 12px;
+            box-shadow: 0 20px 50px rgba(0, 0, 0, 0.8);
+        }
+
+        .imm-h1 {
+            font-size: 3.5rem;
+            text-transform: uppercase;
+            font-weight: 900;
+            margin-bottom: 10px;
+        }
+
+        .imm-tag {
+            background: #ff0000;
+            padding: 6px 16px;
+            border-radius: 20px;
+            font-size: 0.75rem;
+            font-weight: bold;
+            text-transform: uppercase;
+            display: inline-block;
+            margin-bottom: 20px;
+        }
+
+        .horizontal-quote {
+            position: absolute;
+            top: 70%;
+            left: 0;
+            font-size: 8vw;
+            white-space: nowrap;
+            font-weight: 900;
+            text-transform: uppercase;
+            opacity: 0;
+            pointer-events: none;
+            z-index: 50;
+            text-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
+        }
+
+        /* --- FOOTER --- */
+        footer {
+            background: #000;
+            padding: 10rem 2.5rem 2.5rem;
+            border-top: 1px solid #18181b;
+        }
+
+        .footer-content {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .footer-reveal-text {
+            font-family: 'Orbitron', sans-serif;
+            font-size: 8vw;
+            line-height: 0.8;
+            font-weight: 900;
+            font-style: italic;
+            color: #1a1a1a;
+            transition: color 0.5s ease;
+            text-transform: uppercase;
+        }
+
+        footer:hover .footer-reveal-text {
+            color: var(--primary);
+        }
+
+        /* --- RESPONSIVE --- */
+        @media (max-width: 768px) {
+            .nav-bar {
+                padding: 1.5rem;
+            }
+
+            .nav-center {
+                display: none;
+            }
+
+            .hero-title {
+                font-size: 18vw;
+            }
+
+            .technical-grid {
+                flex-direction: column;
+                padding: 5rem 1.5rem;
+            }
+
+            .sticky-text {
+                position: relative;
+                top: 0;
+                width: 100%;
+            }
+
+            .card-wrapper.c1 {
+                position: relative;
+                right: 0;
+                top: 0;
+                width: 100%;
+                margin-top: 2rem;
+            }
+
+            .imm-h1 {
+                font-size: 2rem;
+            }
+
+            .split-layout {
+                flex-direction: column !important;
+                text-align: center;
+                gap: 2rem;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+    <video autoplay muted loop playsinline class="fixed-bg-video">
+        <!-- Using standard Flask static folder pattern -->
+        <source src="./static/bg_video.mp4" type="video/mp4">
+    </video>
+    <nav class="nav-bar">
+        <div class="logo-circle">
+            <!-- Placeholder for logo -->
+            <i class="fa-solid fa-compass" style="font-size: 1.5rem; color: #fff;"></i>
+        </div>
+
+        <!-- <div class="nav-center">
+            <a href="#features">Features</a>
+            <a href="#footer">About</a>
+        </div> -->
+
+        <div class="nav-center nav-actions">
+            
+            <a href="dashboard.html" style="color: var(--primary);">Dashboard</a>
+            <a href="index.html">Logout</a>
+            
+            <a href="login.html">Login</a>
+            <a href="signup.html" style="color: var(--primary);">Sign Up</a>
+            
+        </div>
+    </nav>
+
+    <section class="hero-section">
+        <h1 class="hero-title">CAREERHUB</h1>
+        <p class="hero-sub">AI POWERED CAREER GPS</p>
+
+        <div style="position: absolute; bottom: 2.5rem; text-align: center; opacity: 0.4;">
+            <p style="font-size: 9px; text-transform: uppercase; letter-spacing: 0.2em; margin-bottom: 1rem;">Scroll to
+                explore</p>
+            <div
+                style="width: 1px; height: 4rem; background: linear-gradient(to bottom, #dc2626, transparent); margin: 0 auto;">
+            </div>
+        </div>
+
+        <div class="mask m1"><span></span><span></span><span></span></div>
+        <div class="mask m2"><span></span><span></span><span></span></div>
+        <div class="mask m3"><span></span><span></span><span></span></div>
+        <div class="mask m4"><span></span><span></span><span></span></div>
+    </section>
+
+    <section id="motion-section" class="technical-grid">
+        <div class="sticky-text">
+            <h1 id="workshops-title" class="newses">CAREER FLOW</h1>
+            <div style="margin-bottom: 1rem; display: flex; align-items: center; gap: 8px;">
+                <span style="width: 8px; height: 8px; background: #dc2626; border-radius: 50%;"></span>
+                <span
+                    style="font-size: 0.7rem; color: #71717a; text-transform: uppercase; letter-spacing: 0.2em;">Mission
+                    Protocol</span>
+            </div>
+            <p class="vision-main">
+                We don’t just recommend careers.
+                We <span>navigate</span> them intelligently.
+            </p>
+            <p style="margin-top: 2rem; color: #a1a1aa; line-height: 1.6;">
+                CareerHub AI analyzes your skills, interests, and progress to guide you step‑by‑step
+                towards the right career and real‑world opportunities.
+            </p>
+        </div>
+
+        <!-- <div id="diagonal-card" class="card-wrapper c1">
+            <img src="./static/workshop.jpg" alt="Student Profile" class="interactive-card">
+            <div class="card-meta">
+                <p class="card-label">Step 01</p>
+                <p class="card-title">STUDENT PROFILING</p>
+            </div>
+        </div> -->
+    </section>
+
+    <div id="immersive-wrapper">
+    </div>
+
+    <div id="horizontal-quote" class="horizontal-quote">From learning to internships — all in one dashboard</div>
+
+    <footer id="footer">
+        <div class="footer-content">
+            <div style="margin-bottom: 5rem;">
+                <p style="color: var(--primary); font-weight: bold; font-size: 0.75rem; text-transform: uppercase;">
+                    CAREERHUB</p>
+                <p style="color: #71717a; font-size: 0.85rem;">
+                    AI‑Powered Career Navigation Platform
+                </p>
+            </div>
+            <div class="footer-reveal-text">CAREERHUB</div>
+            <div
+                style="margin-top: 4rem; display: flex; justify-content: space-between; border-top: 1px solid #18181b; padding-top: 2rem; font-size: 9px; color: #3f3f46; letter-spacing: 0.3em;">
+                <h3>© 2025 CAREERHUB AI</h3>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        // --- DATA ---
+        const topics = [
+            {
+                tag: "01 / Profile",
+                title: "Dynamic Student Profiling",
+                desc: "The system builds a live profile using skills, academics, interests, and course progress.",
+                img: "https://images.unsplash.com/photo-1522202176988-66273c2fd55f?w=800"
+            },
+            {
+                tag: "02 / Intelligence",
+                title: "AI Career Recommendation",
+                desc: "AI analyzes the profile and suggests best‑fit career paths aligned with industry demand.",
+                img: "https://images.unsplash.com/photo-1620712943543-bcc4688e7485?w=800"
+            },
+            {
+                tag: "03 / Navigation",
+                title: "Personalized Career Roadmap",
+                desc: "A step‑by‑step roadmap guides students from learning to projects, internships, and jobs.",
+                img: "https://images.unsplash.com/photo-1581091226825-a6a2a5aee158?w=800"
+            },
+            {
+                tag: "04 / Action",
+                title: "One‑Click Apply",
+                desc: "Students are redirected to official internship platforms directly from the dashboard.",
+                img: "https://images.unsplash.com/photo-1507413245164-6160d8298b31?w=800"
+            },
+            {
+                tag: "05 / Growth",
+                title: "Continuous Re‑Routing",
+                desc: "If goals or performance change, the system adapts the career path dynamically.",
+                img: "https://images.unsplash.com/photo-1522202176988-66273c2fd55f?w=800"
+            }
+        ];
+
+        // --- RENDER IMMERSIVE SECTIONS ---
+        const wrapper = document.getElementById('immersive-wrapper');
+        topics.forEach((item, i) => {
+            const section = document.createElement('div');
+            section.className = 'imm-section';
+            section.id = `section-${i}`;
+            section.innerHTML = `
+                <div id="content-${i}" class="split-layout" style="flex-direction: ${i % 2 !== 0 ? 'row-reverse' : 'row'}">
+                    <img src="${item.img}" class="split-image">
+                    <div>
+                        <span class="imm-tag">${item.tag}</span>
+                        <h1 class="imm-h1">${item.title}</h1>
+                        <p style="color: #ccc; line-height: 1.6;">${item.desc}</p>
+                    </div>
+                </div>
+            `;
+            wrapper.appendChild(section);
+        });
+
+        // --- INITIALIZE LIBRARIES ---
+        gsap.registerPlugin(ScrollTrigger);
+
+        const lenis = new Lenis({
+            duration: 2.5,
+            easing: (t) => Math.min(1, 1.001 - Math.pow(2, -10 * t)),
+            smooth: true
+        });
+
+        function raf(time) {
+            lenis.raf(time);
+            requestAnimationFrame(raf);
+        }
+        requestAnimationFrame(raf);
+
+        // --- ANIMATIONS ---
+        const isDesktop = window.innerWidth > 768;
+
+        // 1. Hero Wipe
+        const masks = gsap.utils.toArray('.mask');
+        ScrollTrigger.create({
+            trigger: ".hero-section",
+            start: "top top",
+            end: "+=1500",
+            pin: true,
+            scrub: 1,
+            onUpdate: (self) => {
+                gsap.set(".hero-title, .hero-sub", { opacity: 1 - (self.progress / 0.8) });
+                masks.forEach((mask, i) => {
+                    const slices = mask.querySelectorAll('span');
+                    const localP = Math.max(0, (self.progress - 0.05 * i) * 2);
+                    slices.forEach((s, j) => {
+                        gsap.set(s, { height: `${Math.min(localP * 100, 160)}%` });
+                    });
+                });
+            }
+        });
+
+        // 2. Workshop Scroll
+        gsap.to("#workshops-title", {
+            x: -window.innerWidth * (isDesktop ? 1.5 : 0.5),
+            scrollTrigger: {
+                trigger: "#motion-section",
+                start: "top bottom",
+                end: "bottom top",
+                scrub: 1
+            }
+        });
+
+        gsap.to("#diagonal-card", {
+            y: -500,
+            x: isDesktop ? -200 : 0,
+            rotation: -10,
+            scrollTrigger: {
+                trigger: "#motion-section",
+                start: "top bottom",
+                end: "bottom top",
+                scrub: 1.5
+            }
+        });
+
+        // 3. Immersive Sections
+        ScrollTrigger.create({
+            trigger: "#immersive-wrapper",
+            start: "top top",
+            end: `+=${topics.length * 1500}`,
+            pin: true,
+            scrub: 0.1,
+            onUpdate: (self) => {
+                const p = self.progress;
+                const segment = 1 / topics.length;
+
+                topics.forEach((_, i) => {
+                    const el = document.getElementById(`section-${i}`);
+                    const content = document.getElementById(`content-${i}`);
+                    const start = i * segment;
+                    const end = (i + 1) * segment;
+
+                    if (p >= start && p <= end) {
+                        const local = (p - start) / segment;
+                        el.style.opacity = 1;
+                        el.style.visibility = "visible";
+                        content.style.transform = `translateY(${(1 - local) * 50}px)`;
+                    } else {
+                        el.style.opacity = 0;
+                        el.style.visibility = "hidden";
+                    }
+                });
+
+                // Marquee Quote
+                const quote = document.getElementById('horizontal-quote');
+                if (p > 0.1) {
+                    quote.style.opacity = 1;
+                    quote.style.transform = `translateX(${100 - (p * 300)}vw)`;
+                } else {
+                    quote.style.opacity = 0;
+                }
+            }
+        });
+    </script>
+</body>
+
+</html>
