@@ -1,0 +1,301 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>CareerHub | Premium Student Analysis</title>
+        <!-- Google Fonts -->
+        <link rel="preconnect" href="https://fonts.googleapis.com">
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700&display=swap"
+                rel="stylesheet">
+        <!-- Font Awesome -->
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+        <!-- Custom CSS -->
+        <link rel="stylesheet" href="./static/style.css?v=mobile_v1">
+</head>
+
+<body>
+        <div class="app-container">
+                
+                <!-- Sidebar Navigation -->
+                <nav class="sidebar">
+                        <div class="logo">
+                                <i class="fa-solid fa-graduation-cap"></i> <span>CareerHub</span>
+                        </div>
+                        <ul class="nav-links">
+                                <li><a href="index.html" class="nav-item"><i class="fa-solid fa-home"></i>
+                                                Homepage</a></li>
+                                <li><a href="dashboard.html" class="nav-item"><i
+                                                        class="fa-solid fa-chart-pie"></i> Personal
+                                                Dashboard</a></li>
+
+                                <li><a href="career.html" class="nav-item"><i
+                                                        class="fa-solid fa-compass"></i> Career
+                                                Explorer</a></li>
+                                <li><a href="roadmap.html" class="nav-item"><i class="fa-solid fa-map"></i>
+                                                Roadmap
+                                                Builder</a></li>
+                                <li><a href="market.html" class="nav-item"><i class="fa-solid fa-globe"></i>
+                                                Booming skills with current trend</a></li>
+                                <li><a href="leetcode.html" class="nav-item"><i
+                                                        class="fa-solid fa-code"></i>
+                                                LeetCode Analysis</a></li>
+                                <li><a href="resume_builder.html" class="nav-item"><i
+                                                        class="fa-solid fa-file-invoice"></i>
+                                                Resume Builder</a></li>
+                                <li><a href="analysis.html" class="nav-item"><i
+                                                        class="fa-brands fa-github"></i>
+                                                GitHub Analysis</a></li>
+
+                                <!-- <li><a href="mentors.html" class="nav-item"><i
+                                                        class="fa-solid fa-users"></i> Mentor
+                                                Network</a></li> -->
+                                <!-- <li><a href="stories.html" class="nav-item"><i class="fa-solid fa-star"></i>
+                                                Success
+                                                Stories</a></li> -->
+                                <!-- <li><a href="institution.html" class="nav-item"><i
+                                                        class="fa-solid fa-university"></i>
+                                                Institution Portal</a></li> -->
+                                <!-- <li><a href="support.html" class="nav-item"><i
+                                                        class="fa-solid fa-headset"></i> Support
+                                                Center</a></li> -->
+                        </ul>
+                        <div class="user-info">
+                                
+                                <div class="avatar">A</div>
+                                <div class="details">
+                                        <span class="name">Alex User</span>
+                                        <a href="index.html"
+                                                style="color: var(--secondary); font-size: 0.8rem; text-decoration: none;">Logout</a>
+                                </div>
+                                
+                        </div>
+                </nav>
+                
+
+                <!-- Main Content -->
+                <main class="main-content">
+                        
+<div class="page-header animate-fade-in">
+    <h1 class="page-title">Success Stories</h1>
+    <p style="color: var(--text-muted);">Inspiring journeys from our alumni network.</p>
+</div>
+
+<div class="glass-card animate-fade-in">
+    <div class="story-content">
+        <div
+            style="width: 100px; height: 100px; background: #3b82f6; border-radius: 12px; flex-shrink: 0; display: flex; align-items: center; justify-content: center; font-size: 2rem; color: white;">
+            Rx</div>
+        <div>
+            <h2>From Student to CEO</h2>
+            <p style="color: var(--primary); margin-bottom: 0.5rem;">Rahul X. - Batch of 2018</p>
+            <p style="color: var(--text-muted); line-height: 1.6;">
+                "EduTrack helped me realize my potential in entrepreneurship. The roadmap builder gave me clarity on
+                what skills I needed to build my own startup right out of college. Today, my company is valued at $5M."
+            </p>
+            <button class="btn btn-primary" style="margin-top: 1rem; font-size: 0.8rem;">Read Full Story</button>
+        </div>
+    </div>
+</div>
+
+<div class="glass-card animate-fade-in" style="margin-top: 2rem; animation-delay: 0.1s;">
+    <div class="story-content">
+        <div
+            style="width: 100px; height: 100px; background: #10b981; border-radius: 12px; flex-shrink: 0; display: flex; align-items: center; justify-content: center; font-size: 2rem; color: white;">
+            PZ</div>
+        <div>
+            <h2>Cracking the FAANG Interview</h2>
+            <p style="color: var(--primary); margin-bottom: 0.5rem;">Priya Z. - Batch of 2023</p>
+            <p style="color: var(--text-muted); line-height: 1.6;">
+                "The Assessment Center was a game changer. The mock interviews and technical quizzes prepared me for the
+                rigorous selection process at Amazon."
+            </p>
+            <button class="btn btn-primary" style="margin-top: 1rem; font-size: 0.8rem;">Read Full Story</button>
+        </div>
+    </div>
+</div>
+
+                </main>
+        </div>
+
+        <!-- Chatbot Floating UI -->
+        <div id="chatbot-container" style="z-index: 10000;">
+                <!-- Toggle Button -->
+                <button id="chat-toggle-btn" onclick="toggleChat()"
+                        style="position: fixed; bottom: 30px; right: 30px; width: 60px; height: 60px; border-radius: 50%; background: linear-gradient(135deg, var(--primary), var(--secondary)); border: none; color: white; font-size: 1.5rem; cursor: pointer; box-shadow: 0 4px 15px rgba(99, 102, 241, 0.4); transition: transform 0.3s ease; display: flex; align-items: center; justify-content: center;">
+                        <i class="fa-solid fa-robot"></i>
+                </button>
+
+                <!-- Chat Window -->
+                <div id="chat-window"
+                        style="position: fixed; bottom: 100px; right: 30px; width: 400px; height: 600px; background: rgba(15, 23, 42, 0.95); backdrop-filter: blur(12px); -webkit-backdrop-filter: blur(12px); border: 1px solid rgba(255,255,255,0.1); border-radius: 16px; box-shadow: 0 10px 40px rgba(0,0,0,0.4); display: none; flex-direction: column; overflow: hidden; transform-origin: bottom right; transition: all 0.3s cubic-bezier(0.19, 1, 0.22, 1);">
+
+                        <!-- Header -->
+                        <div
+                                style="background: rgba(255,255,255,0.05); padding: 1rem; display: flex; align-items: center; justify-content: space-between; border-bottom: 1px solid rgba(255,255,255,0.05);">
+                                <div style="display: flex; align-items: center; gap: 10px;">
+                                        <div
+                                                style="background: rgba(16, 185, 129, 0.2); width: 32px; height: 32px; border-radius: 50%; display: flex; align-items: center; justify-content: center; color: #10b981;">
+                                                <i class="fa-solid fa-robot" style="font-size: 0.9rem;"></i>
+                                        </div>
+                                        <div>
+                                                <h4 style="font-size: 1rem; margin: 0; color: white;">EduBot AI</h4>
+                                                <span style="font-size: 0.7rem; color: #10b981;">● Online</span>
+                                        </div>
+                                </div>
+                                <button onclick="toggleChat()"
+                                        style="background: none; border: none; color: var(--text-muted); cursor: pointer; font-size: 1.1rem;">
+                                        <i class="fa-solid fa-times"></i>
+                                </button>
+                        </div>
+
+                        <!-- Messages Area -->
+                        <div id="chat-messages"
+                                style="flex: 1; padding: 1rem; overflow-y: auto; display: flex; flex-direction: column; gap: 1rem;">
+                                <div class="message bot"
+                                        style="background: rgba(255,255,255,0.05); align-self: flex-start; max-width: 80%; padding: 0.6rem 0.8rem; border-radius: 12px 12px 12px 0; font-size: 0.9rem; color: #e2e8f0;">
+                                        Hi Alex! 👋 I'm your AI mentor. Ask me
+                                        anything about your skills, career path, or coursework!
+                                </div>
+                        </div>
+
+                        <!-- Input Area -->
+                        <div
+                                style="padding: 1rem; background: rgba(0,0,0,0.2); border-top: 1px solid rgba(255,255,255,0.05);">
+                                <form id="chat-form" onsubmit="sendChatMessage(event)"
+                                        style="display: flex; gap: 0.5rem;">
+                                        <input type="text" id="chat-input" placeholder="Ask about projects, skills..."
+                                                required
+                                                style="flex: 1; background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.1); border-radius: 20px; padding: 0.6rem 1rem; color: white; font-size: 0.9rem; outline: none;">
+                                        <button type="submit"
+                                                style="background: var(--primary); border: none; border-radius: 50%; width: 36px; height: 36px; display: flex; align-items: center; justify-content: center; color: white; cursor: pointer;">
+                                                <i class="fa-solid fa-paper-plane" style="font-size: 0.8rem;"></i>
+                                        </button>
+                                </form>
+                        </div>
+                </div>
+        </div>
+
+        <script>
+                let chatOpen = false;
+                let chatHistory = [];
+
+                function toggleChat() {
+                        const win = document.getElementById('chat-window');
+                        const icon = document.querySelector('#chat-toggle-btn i');
+
+                        chatOpen = !chatOpen;
+                        if (chatOpen) {
+                                win.style.display = 'flex';
+                                icon.classList.remove('fa-robot');
+                                icon.classList.add('fa-chevron-down');
+                                setTimeout(() => document.getElementById('chat-input').focus(), 100);
+                        } else {
+                                win.style.display = 'none';
+                                icon.classList.remove('fa-chevron-down');
+                                icon.classList.add('fa-robot');
+                        }
+                }
+
+                async function sendChatMessage(e) {
+                        e.preventDefault();
+                        const input = document.getElementById('chat-input');
+                        const msg = input.value.trim();
+                        if (!msg) return;
+
+                        // 1. Add User Message
+                        addMessage(msg, 'user');
+                        input.value = '';
+                        input.disabled = true;
+
+                        // Add to history
+                        chatHistory.push({ role: "user", content: msg });
+
+                        // 2. Show Loading
+                        const loaderId = addLoader();
+
+                        try {
+                                const response = await fetch('/api/chat', {
+                                        method: 'POST',
+                                        headers: { 'Content-Type': 'application/json' },
+                                        body: JSON.stringify({
+                                                message: msg,
+                                                history: chatHistory
+                                        })
+                                });
+
+                                const data = await response.json();
+                                removeLoader(loaderId);
+
+                                if (data.reply) {
+                                        addMessage(data.reply, 'bot');
+                                        chatHistory.push({ role: "assistant", content: data.reply });
+                                } else {
+                                        addMessage("Sorry, I encountered an error. Please try again.", 'bot');
+                                }
+
+                        } catch (err) {
+                                removeLoader(loaderId);
+                                console.error(err);
+                                addMessage("Network error. Please try again.", 'bot');
+                        } finally {
+                                input.disabled = false;
+                                input.focus();
+                        }
+                }
+
+                function addMessage(text, sender) {
+                        const container = document.getElementById('chat-messages');
+                        const div = document.createElement('div');
+
+                        // Styles remain same but we add 'markdown-content' class concept via inline styles
+                        const baseStyle = "max-width: 85%; padding: 0.8rem 1rem; font-size: 0.95rem; line-height: 1.5; word-wrap: break-word; box-shadow: 0 2px 5px rgba(0,0,0,0.1);";
+                        const userStyle = "background: var(--primary); color: white; align-self: flex-end; border-radius: 12px 12px 0 12px;";
+                        const botStyle = "background: rgba(255,255,255,0.1); color: #e2e8f0; align-self: flex-start; border-radius: 12px 12px 12px 0;";
+
+                        div.style.cssText = baseStyle + (sender === 'user' ? userStyle : botStyle);
+
+                        // Simple Markdown Parser
+                        if (sender === 'bot') {
+                                let formatted = text
+                                        // Bold **text**
+                                        .replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>')
+                                        // Italic *text*
+                                        .replace(/\*(.*?)\*/g, '<em>$1</em>')
+                                        // Code blocks `text`
+                                        .replace(/`(.*?)`/g, '<code style="background:rgba(0,0,0,0.3); padding:2px 4px; border-radius:4px; font-family:monospace;">$1</code>')
+                                        // Lists - (must start at new line)
+                                        .replace(/^- (.*$)/gim, '<li>$1</li>')
+                                        // Line breaks to <br>
+                                        .replace(/\n/g, '<br>');
+
+                                div.innerHTML = formatted;
+                        } else {
+                                div.innerText = text;
+                        }
+
+                        container.appendChild(div);
+                        container.scrollTop = container.scrollHeight;
+                }
+
+                function addLoader() {
+                        const container = document.getElementById('chat-messages');
+                        const div = document.createElement('div');
+                        div.id = 'chat-loader';
+                        div.style.cssText = "align-self: flex-start; padding: 0.5rem 1rem; background: rgba(255,255,255,0.05); border-radius: 12px; color: var(--text-muted); font-size: 0.8rem;";
+                        div.innerHTML = '<i class="fa-solid fa-circle-notch fa-spin"></i> Thinking...';
+                        container.appendChild(div);
+                        container.scrollTop = container.scrollHeight;
+                        return div.id;
+                }
+
+                function removeLoader(id) {
+                        const el = document.getElementById(id);
+                        if (el) el.remove();
+                }
+        </script>
+</body>
+
+</html>
