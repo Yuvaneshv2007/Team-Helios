@@ -1,0 +1,10 @@
+flask
+gunicorn
+requests
+python-dotenv
+easyocr
+torch
+torchvision
+opencv-python-headless
+firebase-admin
+werkzeug

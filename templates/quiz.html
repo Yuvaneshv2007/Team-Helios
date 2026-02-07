@@ -1,0 +1,59 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="page-header animate-fade-in">
+    <h1 class="page-title">Skill Assessment: {{ role_name }}</h1>
+    <p style="color: var(--text-muted);">Answer these 10 questions to evaluate your readiness for this role.</p>
+</div>
+
+<div class="glass-card animate-fade-in" style="max-width: 800px; margin: 0 auto;">
+    <form action="{{ url_for('submit_quiz') }}" method="POST">
+        <input type="hidden" name="role_name" value="{{ role_name }}">
+        <!-- Pass full questions data back to server for grading context -->
+        <input type="hidden" name="quiz_data_json" value='{{ questions | tojson | safe }}'>
+
+        {% for q in questions %}
+        <div style="margin-bottom: 2rem; padding-bottom: 2rem; border-bottom: 1px solid rgba(255,255,255,0.1);">
+            <p style="font-size: 1.1rem; color: #fff; margin-bottom: 1rem;">
+                <span style="color: var(--primary); font-weight: bold;">Q{{ loop.index }}.</span> {{ q.text }}
+            </p>
+
+            <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 1rem;">
+                {% for option in q.options %}
+                <label
+                    style="display: flex; align-items: center; justify-content: center; text-align: center; gap: 0.8rem; cursor: pointer; background: rgba(255,255,255,0.05); padding: 1.5rem; border-radius: 12px; transition: all 0.2s; border: 2px solid transparent; height: 100%;">
+                    <input type="radio" name="q_{{ q.id }}" value="{{ option }}" required
+                        style="position: absolute; opacity: 0; pointer-events: none;">
+                    <span style="color: var(--text-muted); line-height: 1.4; font-size: 1rem;">{{ option }}</span>
+                </label>
+                {% endfor %}
+            </div>
+        </div>
+        {% endfor %}
+
+        <div style="text-align: center;">
+            <button type="submit" class="btn btn-primary" style="padding: 1rem 3rem; font-size: 1.1rem;">
+                <i class="fa-solid fa-paper-plane"></i> Submit Assessment
+            </button>
+        </div>
+    </form>
+</div>
+
+<style>
+    label:hover {
+        background: rgba(255, 255, 255, 0.1) !important;
+        transform: translateY(-2px);
+    }
+
+    /* Selected State Style */
+    label:has(input:checked) {
+        border-color: var(--primary) !important;
+        background: rgba(var(--primary-rgb), 0.1) !important;
+    }
+
+    label:has(input:checked) span {
+        color: #fff !important;
+        font-weight: 600;
+    }
+</style>
+{% endblock %}
