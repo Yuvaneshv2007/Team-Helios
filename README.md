@@ -1,122 +1,108 @@
-# 🚀 CareerHub AI
+# CareerNav AI (Team Helios) 🚀
 
-**Navigate Your Future with Intelligence.**
+**CareerNav AI** is an advanced career guidance platform designed to empower students and professionals with AI-driven insights. By analyzing resumes, GitHub repositories, and LeetCode profiles, the platform provides personalized roadmaps, job market analysis, and skill verification to bridge the gap between education and industry requirements.
 
-CareerHub (formerly EduTrack) is an advanced, AI-powered career navigation platform designed to guide students from learning to leadership. By analyzing profiles, academic records, and technical footprints (GitHub/LeetCode), CareerHub generates personalized roadmaps, internships opportunities, and actionable insights to accelerate career growth.
-
-![CareerHub Landing](static/workshop.jpg) 
-*(Note: Replace with actual screenshots if available)*
-
----
+![License](https://img.shields.io/badge/license-MIT-blue.svg)
+![Python](https://img.shields.io/badge/python-3.8%2B-blue)
+![Flask](https://img.shields.io/badge/flask-2.0%2B-green)
+![Firebase](https://img.shields.io/badge/firebase-firestore-orange)
 
 ## 🌟 Key Features
 
-### 🧠 **AI-Driven Logic**
-- **Dynamic Profiling**: Continuously builds a live student profile based on skills, interests, and course progress.
-- **Career GPS**: Uses Generative AI (Google Gemini) to suggest bespoke career paths matched to industry trends.
-- **Resume Intelligence**: Upload your resume for AI analysis, parsing, and improvement suggestions.
+### 🧠 AI-Powered Analysis
+- **Resume & Certificate Parsing**: upload your resume or certificates to automatically extract skills and verify achievements using **EasyOCR** and **LLaMA** models.
+- **Smart Career Roadmap**: Generates a step-by-step learning path tailored to your current skills and target role.
+- **Market Insights**: Provides real-time analysis of job market trends, salary estimates, and booming roles based on your profile.
 
-### 🔗 **Integrations**
-- **GitHub Analysis**: Connect your GitHub to inspect repositories, detect tech stacks (Software, ML, Web), and identify project gaps.
-- **LeetCode Stats**: Visualize your algorithmic problem-solving progress directly on the dashboard.
+### 💻 Developer Profile Integration
+- **GitHub Analysis**: Connects to your GitHub to analyze repositories, classify projects (Web, ML, IoT, etc.), and determine career readiness.
+- **LeetCode Strategy**: Fetches your LeetCode problem stats to create a focused study plan and identify weak areas in data structures & algorithms.
 
-### 🎮 **Gamification**
-- **Daily Bounties**: A "Bounty Hunter" game mode where you shoot targets to answer technical quizzes and earn XP.
-- **XP & Leaderboard**: Track your growth and compete with others.
+### 🎓 Higher Education & Internships
+- **University Recommender**: Suggests top global and domestic universities based on your profile and exam scores (GRE, IELTS, etc.), complete with admission probabilities.
+- **Internship Portal**: Access a curated list of internships and job openings relevant to your tech stack.
 
-### 🗺️ **Roadmap Builder**
-- **Step-by-Step Guidance**: tailored milestones from beginner to expert.
-- **Resource Recommendation**: Curated courses and projects for every stage.
-
-### 🎨 **Modern UI/UX**
-- **Immersive Landing**: Features GSAP animations and scroll-triggered storytelling.
-- **Glassmorphism Design**: sleek, dark-themed dashboard with responsive elements.
-
----
+### 🎮 Gamification & Engagement
+- **Daily Bounties**: Solve daily technical challenges to earn XP and track your progress.
+- **Skill Verification Quizzes**: Take AI-generated quizzes to validate your expertise in specific roles.
+- **EduBot**: An interactive AI mentor that answers your career queries with context from your profile.
 
 ## 🛠️ Technology Stack
 
-- **Backend**: Python (Flask)
-- **Frontend**: HTML5, Vanilla CSS3 (Glassmorphism), JavaScript
-- **Animations**: GSAP, Lenis Smooth Scroll
-- **AI Models**: Google Gemini Pro (GenAI), LLaMA (via API)
-- **Database**: Firebase / Firestore
-- **Deployment**: Vercel / Heroku Support (`Procfile` included)
+- **Backend**: Python, Flask
+- **Database**: Google Firebase (Firestore)
+- **AI & LLM**: Meta LLaMA 3 (via OpenRouter API), Google Gemini (integrated libraries)
+- **OCR**: EasyOCR (for text extraction from images/PDFs)
+- **Frontend**: HTML5, CSS3, JavaScript (Jinja2 Templates)
+- **Tools**: Git, Docker (optional)
 
----
-
-## ⚡ Getting Started
+## 🚀 Getting Started
 
 ### Prerequisites
-- Python 3.9+
-- Git
+- Python 3.8 or higher
+- A Firebase Service Account Key (`serviceAccountKey.json`)
+- An OpenRouter API Key for AI features
 
 ### Installation
 
 1. **Clone the Repository**
    ```bash
-   git clone https://github.com/Pranatheesh-S/AI-IGNITE.git
-   cd AI-IGNITE
+   git clone https://github.com/Yuvaneshv2007/Team-Helios.git
+   cd Team-Helios
    ```
 
 2. **Install Dependencies**
    ```bash
    pip install -r requirements.txt
    ```
+   *Note: Ensure you have `torch` installed if required by EasyOCR.*
 
-3. **Environment Setup**
-   Create a `.env` file in the root directory and add your API keys:
+3. **Configure Environment Variables**
+   Create a `.env` file in the root directory and add your keys:
    ```env
-   SECRET_KEY=your_flask_secret
-   GOOGLE_API_KEY=your_gemini_api_key
-   FIREBASE_CREDENTIALS=path/to/firebase_key.json
-   GITHUB_TOKEN=your_github_token (optional)
+   OPENROUTER_API_KEY=your_openrouter_api_key_here
+   # Add other necessary keys like Firebase config if not using json file directly
    ```
 
-4. **Run the Application**
+4. **Firebase Setup**
+   - Place your `serviceAccountKey.json` in the `app/` directory or update the initialization path in `models.py`.
+
+5. **Run the Application**
    ```bash
    python app/app.py
    ```
-   Access the app at `http://127.0.0.1:5000`
-
----
+   The application will start at `http://localhost:5000`.
 
 ## 📂 Project Structure
 
 ```
-AI-IGNITE/
-│
+Team-Helios/
 ├── app/
-│   └── app.py            # Main application entry point
-│
-├── static/               # CSS, JS, Images, Videos
-│   ├── style.css
-│   ├── bg_video.mp4
+│   ├── app.py             # Main Flask Application
+│   ├── models.py          # Database Models (Firebase)
 │   └── ...
-│
-├── templates/            # HTML Templates (Jinja2)
-│   ├── index.html        # Landing Page
-│   ├── dashboard.html    # User Dashboard
-│   ├── game.html         # Bounty Hunter Game
+├── templates/             # HTML Templates for frontend
+│   ├── dashboard.html
+│   ├── index.html
 │   └── ...
-│
-├── requirements.txt      # Python dependencies
-├── Procfile              # Deployment configuration
-└── README.md             # Documentation
+├── static/                # CSS, JS, and Images
+├── requirements.txt       # Python Dependencies
+├── README.md              # Project Documentation
+└── .env                   # Environment Variables
 ```
-
----
 
 ## 🤝 Contributing
 
-Contributions are welcome! Please fork the repository and create a pull request for any feature enhancements or bug fixes.
+Contributions are welcome! Please follow these steps:
+1. Fork the repository.
+2. Create a new branch (`git checkout -b feature/YourFeature`).
+3. Commit your changes (`git commit -m 'Add some feature'`).
+4. Push to the branch (`git push origin feature/YourFeature`).
+5. Open a Pull Request.
+
+## 📄 License
+
+This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
 
 ---
-
-## 📜 License
-
-This project is licensed under the MIT License.
-
----
-
-**Built with ❤️ by the CareerHub Team.**
+*Built with ❤️ by Team Helios*
