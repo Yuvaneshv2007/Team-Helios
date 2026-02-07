@@ -176,6 +176,7 @@ h3 {
     font-weight: 700;
     background: linear-gradient(to right, #fff, #94a3b8);
     -webkit-background-clip: text;
+    background-clip: text;
     -webkit-text-fill-color: transparent;
 }
 
@@ -451,5 +452,26 @@ select:focus {
 
     to {
         opacity: 1;
+    }
+}
+
+/* Internships Grid */
+.internships-grid {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 1.5rem;
+    max-width: 900px;
+    margin: 0 auto;
+}
+
+.internship-card {
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+}
+
+@media (max-width: 768px) {
+    .internships-grid {
+        grid-template-columns: 1fr;
     }
 }

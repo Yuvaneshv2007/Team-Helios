@@ -1,59 +1,353 @@
 {% extends "base.html" %}
 
 {% block content %}
-<div class="page-header animate-fade-in">
-    <h1 class="page-title">Skill Assessment: {{ role_name }}</h1>
-    <p style="color: var(--text-muted);">Answer these 10 questions to evaluate your readiness for this role.</p>
+<style>
+    /* Full Screen Quiz Mode Styles */
+    body.quiz-mode {
+        overflow: hidden;
+        /* Prevent scrolling in full screen */
+    }
+
+    .quiz-container {
+        display: none;
+        /* Hidden until start */
+        height: 100vh;
+        width: 100vw;
+        position: fixed;
+        top: 0;
+        left: 0;
+        background: var(--bg-dark);
+        z-index: 9999;
+        flex-direction: column;
+        padding: 2rem;
+        overflow-y: auto;
+    }
+
+    /* Top Navigation Bar */
+    .quiz-nav {
+        display: flex;
+        gap: 0.5rem;
+        flex-wrap: wrap;
+        margin-bottom: 2rem;
+        padding-bottom: 1rem;
+        border-bottom: 1px solid var(--glass-border);
+        justify-content: flex-start;
+    }
+
+    .nav-dot {
+        width: 40px;
+        height: 40px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        border-radius: 8px;
+        background: rgba(255, 255, 255, 0.05);
+        color: var(--text-muted);
+        border: 1px solid var(--glass-border);
+        cursor: pointer;
+        font-weight: 600;
+        font-size: 0.9rem;
+        transition: all 0.2s;
+    }
+
+    .nav-dot.active {
+        background: var(--primary);
+        color: white;
+        border-color: var(--primary);
+    }
+
+    .nav-dot.answered {
+        border-color: var(--primary);
+        color: var(--primary);
+    }
+
+    /* Question Card */
+    .question-wrapper {
+        flex: 1;
+        display: flex;
+        flex-direction: column;
+        max-width: 900px;
+        margin: 0 auto;
+        width: 100%;
+        position: relative;
+    }
+
+    .question-slide {
+        display: none;
+        animation: fadeIn 0.4s ease;
+    }
+
+    .question-slide.active {
+        display: block;
+    }
+
+    .q-title {
+        font-size: 1.5rem;
+        font-weight: 700;
+        margin-bottom: 1.5rem;
+        color: #fff;
+    }
+
+    /* Options */
+    .options-grid {
+        display: flex;
+        flex-direction: column;
+        gap: 1rem;
+    }
+
+    .option-card {
+        display: flex;
+        align-items: center;
+        padding: 1.2rem;
+        background: rgba(255, 255, 255, 0.03);
+        border: 1px solid var(--glass-border);
+        border-radius: 12px;
+        cursor: pointer;
+        transition: all 0.2s;
+    }
+
+    .option-card:hover {
+        background: rgba(255, 255, 255, 0.08);
+    }
+
+    .option-card.selected {
+        background: rgba(99, 102, 241, 0.15);
+        /* Primary tint */
+        border-color: var(--primary);
+    }
+
+    .option-radio {
+        width: 20px;
+        height: 20px;
+        margin-right: 1rem;
+        accent-color: var(--primary);
+    }
+
+    .option-text {
+        font-size: 1.1rem;
+        color: #e2e8f0;
+    }
+
+    /* Navigation Controls */
+    .controls {
+        display: flex;
+        justify-content: space-between;
+        margin-top: 2rem;
+        padding-top: 2rem;
+    }
+
+    /* Start Overlay */
+    .start-overlay {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background: rgba(15, 23, 42, 0.95);
+        z-index: 10000;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        text-align: center;
+        padding: 2rem;
+    }
+</style>
+
+<!-- Start Screen Overlay -->
+<div class="start-overlay" id="startOverlay">
+    <div class="glass-card animate-fade-in" style="max-width: 500px; padding: 3rem;">
+        <i class="fa-solid fa-shield-halved" style="font-size: 4rem; color: var(--primary); margin-bottom: 1.5rem;"></i>
+        <h1>{{ role_name }} Assessment</h1>
+        <p style="color: var(--text-muted); margin: 1rem 0 2rem;">
+            This test consists of {{ questions|length }} questions.
+            <br><br>
+            <strong style="color: #ef4444;"><i class="fa-solid fa-circle-exclamation"></i> STRICT MODE ENABLED</strong>
+            <br>
+            This test requires <b>Full Screen Mode</b>.
+            <br>
+            If you exit full screen or switch tabs, the test will <b>terminate immediately</b> and restart.
+        </p>
+        <button class="btn btn-primary" onclick="startQuiz()" style="padding: 1rem 2rem; font-size: 1.2rem;">
+            <i class="fa-solid fa-expand"></i> Enter Full Screen & Start
+        </button>
+        <br>
+        <a href="{{ url_for('dashboard') }}"
+            style="color: var(--text-muted); font-size: 0.9rem; margin-top: 1rem; display: inline-block;">Cancel &
+            Return</a>
+    </div>
 </div>
 
-<div class="glass-card animate-fade-in" style="max-width: 800px; margin: 0 auto;">
-    <form action="{{ url_for('submit_quiz') }}" method="POST">
+<!-- Main Quiz Interface -->
+<div class="quiz-container" id="quizContainer">
+    <form action="{{ submit_action if submit_action else url_for('submit_quiz') }}" method="POST" id="quizForm">
         <input type="hidden" name="role_name" value="{{ role_name }}">
-        <!-- Pass full questions data back to server for grading context -->
+        {% if step_index is defined %}
+        <input type="hidden" name="step_index" value="{{ step_index }}">
+        {% endif %}
         <input type="hidden" name="quiz_data_json" value='{{ questions | tojson | safe }}'>
 
-        {% for q in questions %}
-        <div style="margin-bottom: 2rem; padding-bottom: 2rem; border-bottom: 1px solid rgba(255,255,255,0.1);">
-            <p style="font-size: 1.1rem; color: #fff; margin-bottom: 1rem;">
-                <span style="color: var(--primary); font-weight: bold;">Q{{ loop.index }}.</span> {{ q.text }}
-            </p>
-
-            <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 1rem;">
-                {% for option in q.options %}
-                <label
-                    style="display: flex; align-items: center; justify-content: center; text-align: center; gap: 0.8rem; cursor: pointer; background: rgba(255,255,255,0.05); padding: 1.5rem; border-radius: 12px; transition: all 0.2s; border: 2px solid transparent; height: 100%;">
-                    <input type="radio" name="q_{{ q.id }}" value="{{ option }}" required
-                        style="position: absolute; opacity: 0; pointer-events: none;">
-                    <span style="color: var(--text-muted); line-height: 1.4; font-size: 1rem;">{{ option }}</span>
-                </label>
-                {% endfor %}
+        <!-- Top Nav -->
+        <div class="quiz-nav" id="quizNav">
+            {% for q in questions %}
+            <div class="nav-dot {{ 'active' if loop.index0 == 0 else '' }}" onclick="goToQuestion({{ loop.index0 }})"
+                id="dot-{{ loop.index0 }}">
+                Q{{ loop.index }}
             </div>
+            {% endfor %}
+            <button type="submit" class="btn btn-primary" style="margin-left: auto; padding: 0.5rem 1.5rem;"
+                onclick="return confirmSubmit()">
+                Submit
+            </button>
         </div>
-        {% endfor %}
 
-        <div style="text-align: center;">
-            <button type="submit" class="btn btn-primary" style="padding: 1rem 3rem; font-size: 1.1rem;">
-                <i class="fa-solid fa-paper-plane"></i> Submit Assessment
+        <!-- Questions -->
+        <div class="question-wrapper">
+            {% for q in questions %}
+            <div class="question-slide {{ 'active' if loop.index0 == 0 else '' }}" id="q-slide-{{ loop.index0 }}">
+                <h2 style="color: var(--text-muted); font-size: 1rem; margin-bottom: 0.5rem;">Question {{ loop.index }}
+                    of {{ questions|length }}</h2>
+                <div class="q-title">{{ q.text }}</div>
+
+                <div class="options-grid">
+                    {% for option in q.options %}
+                    <label class="option-card" onclick="selectOption(this)">
+                        <input type="radio" name="q_{{ q.id }}" value="{{ option }}" class="option-radio"
+                            onchange="markAnswered({{ loop.index0 }})">
+                        <span class="option-text">{{ option }}</span>
+                    </label>
+                    {% endfor %}
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+
+        <!-- Controls -->
+        <div class="controls">
+            <button type="button" class="btn" id="prevBtn" onclick="changeQuestion(-1)" disabled
+                style="background: rgba(255,255,255,0.1); color: white;">
+                <i class="fa-solid fa-arrow-left"></i> Previous
+            </button>
+            <button type="button" class="btn btn-primary" id="nextBtn" onclick="changeQuestion(1)">
+                Next <i class="fa-solid fa-arrow-right"></i>
             </button>
         </div>
     </form>
 </div>
 
-<style>
-    label:hover {
-        background: rgba(255, 255, 255, 0.1) !important;
-        transform: translateY(-2px);
+<script>
+    let currentQuestion = 0;
+    const totalQuestions = {{ questions| length }};
+    const savedAnswers = new Set();
+    let isTestActive = false;
+
+    // --- Strict Mode Logic ---
+    function startQuiz() {
+        // Request Full Screen
+        const elem = document.documentElement;
+        if (elem.requestFullscreen) {
+            elem.requestFullscreen().then(() => {
+                activateQuiz();
+            }).catch(err => {
+                alert(`Error attempting to enable full-screen mode: ${err.message} (${err.name})`);
+            });
+        } else {
+            // Fallback (older browsers)
+            activateQuiz();
+        }
     }
 
-    /* Selected State Style */
-    label:has(input:checked) {
-        border-color: var(--primary) !important;
-        background: rgba(var(--primary-rgb), 0.1) !important;
+    function activateQuiz() {
+        document.getElementById('startOverlay').style.display = 'none';
+        document.querySelector('.app-container').style.display = 'none'; // Hide sidebar/base layout
+        document.getElementById('quizContainer').style.display = 'flex';
+        document.body.classList.add('quiz-mode');
+        isTestActive = true;
     }
 
-    label:has(input:checked) span {
-        color: #fff !important;
-        font-weight: 600;
+    // Monitor Full Screen
+    document.addEventListener('fullscreenchange', checkFullScreen);
+    document.addEventListener('webkitfullscreenchange', checkFullScreen);
+    document.addEventListener('mozfullscreenchange', checkFullScreen);
+
+    function checkFullScreen() {
+        if (!document.fullscreenElement && !document.webkitIsFullScreen && !document.mozFullScreen && isTestActive) {
+            alert("⚠️ VIOLATION: You exited full screen mode!\n\nThe test will now terminate and reset to ensure integrity.");
+            // Reload page to reset
+            window.location.reload();
+        }
     }
-</style>
+
+    // Prevent Tab Switch (Visibility API)
+    document.addEventListener("visibilitychange", () => {
+        if (document.hidden && isTestActive) {
+            alert("⚠️ VIOLATION: You switched tabs!\n\nThe test will now terminate and reset.");
+            window.location.reload();
+        }
+    });
+
+    // --- UI Logic ---
+
+    function changeQuestion(dir) {
+        const newIndex = currentQuestion + dir;
+        if (newIndex >= 0 && newIndex < totalQuestions) {
+            goToQuestion(newIndex);
+        }
+    }
+
+    function goToQuestion(index) {
+        // Hide current
+        document.getElementById(`q-slide-${currentQuestion}`).classList.remove('active');
+        document.getElementById(`dot-${currentQuestion}`).classList.remove('active');
+
+        // Show new
+        currentQuestion = index;
+        document.getElementById(`q-slide-${currentQuestion}`).classList.add('active');
+        document.getElementById(`dot-${currentQuestion}`).classList.add('active');
+
+        // Update Buttons
+        document.getElementById('prevBtn').disabled = (currentQuestion === 0);
+
+        const nextBtn = document.getElementById('nextBtn');
+        if (currentQuestion === totalQuestions - 1) {
+            nextBtn.innerHTML = 'Finish <i class="fa-solid fa-check"></i>';
+            nextBtn.onclick = () => document.getElementById('quizForm').submit();
+        } else {
+            nextBtn.innerHTML = 'Next <i class="fa-solid fa-arrow-right"></i>';
+            nextBtn.onclick = () => changeQuestion(1);
+        }
+    }
+
+    function selectOption(label) {
+        // Remove style from siblings
+        const parent = label.parentElement;
+        const allLabels = parent.querySelectorAll('.option-card');
+        allLabels.forEach(l => l.classList.remove('selected'));
+
+        // Add style to selected
+        label.classList.add('selected');
+
+        // Trigger radio check manually if needed (though label click does it)
+        const radio = label.querySelector('input[type="radio"]');
+        radio.checked = true;
+
+        // Mark Nav Dot
+        // We get the radio's onchange logic to handle this mostly but let's force update
+        // The index is implicit from context, but we need scope. 
+        // We can find the slide ID
+        const slide = label.closest('.question-slide');
+        const index = slide.id.split('-')[2];
+        markAnswered(index);
+    }
+
+    function markAnswered(index) {
+        document.getElementById(`dot-${index}`).classList.add('answered');
+    }
+
+    function confirmSubmit() {
+        return confirm("Are you sure you want to submit your assessment?");
+    }
+
+    // Disable standard F11 or Esc if possible (User agent limitations apply, strict mode relies on event listeners)
+</script>
 {% endblock %}

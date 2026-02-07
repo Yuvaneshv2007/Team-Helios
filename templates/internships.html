@@ -27,8 +27,7 @@
 
     <!-- Internships Grid -->
     <div style="grid-column: 1 / -1;">
-        <div class="internships-container"
-            style="display: grid; grid-template-columns: repeat(auto-fit, minmax(350px, 1fr)); gap: 1.5rem;">
+        <div class="internships-grid">
             {% for internship in internships %}
             <div class="glass-card animate-fade-in internship-card"
                 data-tags="{{ internship.tags|join(' ')|lower|replace(' ', '-') }}">
@@ -116,7 +115,7 @@
             // Allow partial match (e.g. 'remote' matches 'remote-work')
             // Using includes check on the formatted string
             if (filter === 'all' || tags.includes(filter)) {
-                card.style.display = 'flex'; // Restore flex for layout
+                card.style.display = ''; // Revert to CSS (flex)
                 visibleCount++;
             } else {
                 card.style.display = 'none';

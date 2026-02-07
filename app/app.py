@@ -91,7 +91,7 @@ def get_leetcode_topic_stats(username):
     return None
 
 # --- Helper: Send Question to LLaMA ---
-def ask_llama(context_text, question):
+def ask_llama(context_text, question, max_tokens=1000):
     """Universal helper to communicate with LLaMA via OpenRouter."""
     if not API_KEY:
         return "API Key missing."
@@ -109,7 +109,7 @@ def ask_llama(context_text, question):
             }
         ],
         "temperature": 0.2,
-        "max_tokens": 1000
+        "max_tokens": max_tokens
     }
 
     try:
@@ -1892,6 +1892,104 @@ def submit_quiz():
         }
 
     return render_template('quiz_result.html', role_name=role_name, score=score, total=total, results=user_results, analysis=analysis)
+
+@app.route('/roadmap/quiz/<int:step_index>')
+@login_required
+def take_roadmap_quiz(step_index):
+    student = Student.get_by_id(session['user_id'])
+    
+    if not student or not student.roadmap or step_index >= len(student.roadmap):
+        flash("Invalid roadmap step.")
+        return redirect(url_for('roadmap'))
+    
+    step = student.roadmap[step_index]
+    step_title = step.get('title', 'Unknown Topic')
+
+    prompt = (
+        f"Create a technical assessment quiz for the topic: '{step_title}'.\n"
+        "Generate exactly 25 Multiple Choice Questions (MCQs) testing in-depth knowledge.\n"
+        "Format strictly as a JSON object with this structure:\n"
+        "{\n"
+        "  \"questions\": [\n"
+        "    {\n"
+        "      \"id\": 1,\n"
+        "      \"text\": \"Question text here?\",\n"
+        "      \"options\": [\"Option A\", \"Option B\", \"Option C\", \"Option D\"],\n"
+        "      \"correct_index\": 0\n"
+        "    }\n"
+        "  ]\n"
+        "}\n"
+        "No Markdown. Return only valid JSON. Do not use trailing commas."
+    )
+    
+    response_text = ask_llama("", prompt, max_tokens=3000)
+    
+    questions = []
+    try:
+        clean_json = re.sub(r'```json\s*|\s*```', '', response_text).strip()
+        data = json.loads(clean_json)
+        questions = data.get('questions', [])
+    except Exception as e:
+        print(f"Roadmap Quiz Gen Error: {e}")
+        flash("Could not generate quiz. Please try again.")
+        return redirect(url_for('roadmap'))
+        
+    return render_template('quiz.html', 
+                           role_name=f"Roadmap Step: {step_title}", 
+                           questions=questions,
+                           step_index=step_index,
+                           submit_action=url_for('submit_roadmap_quiz'))
+
+@app.route('/roadmap/quiz/submit', methods=['POST'])
+@login_required
+def submit_roadmap_quiz():
+    step_index_str = request.form.get('step_index')
+    if not step_index_str:
+        flash("Error: Missing step index.")
+        return redirect(url_for('roadmap'))
+    
+    step_index = int(step_index_str)
+    student = Student.get_by_id(session['user_id'])
+    
+    quiz_data_str = request.form.get('quiz_data_json')
+    if not quiz_data_str:
+        return "Error: Missing quiz data", 400
+        
+    import json
+    questions = json.loads(quiz_data_str)
+    
+    score = 0
+    total = len(questions)
+    
+    # Grading
+    for q in questions:
+        qid = str(q['id'])
+        selected_option = request.form.get(f"q_{qid}")
+        correct_option = q['options'][q['correct_index']]
+        if selected_option == correct_option:
+            score += 1
+
+    # Logic: Need 18 to pass
+    PASSING_SCORE = 18
+    
+    if score >= PASSING_SCORE:
+        # Update Roadmap
+        if student.roadmap and step_index < len(student.roadmap):
+            # Mark current as Completed
+            student.roadmap[step_index]['status'] = 'Completed'
+            
+            # Unlock next if exists
+            if step_index + 1 < len(student.roadmap):
+                 student.roadmap[step_index + 1]['status'] = 'Focus'
+            
+            # Save to DB (update entire roadmap)
+            student.update({'roadmap': student.roadmap})
+            
+            flash(f"Congratulations! You passed with {score}/{total}. Next step unlocked!")
+    else:
+        flash(f"You scored {score}/{total}. You need {PASSING_SCORE} to proceed. Review the material and try again.")
+
+    return redirect(url_for('roadmap'))
 
 if __name__ == '__main__':
     app.run(host='0.0.0.0', port=5000)
