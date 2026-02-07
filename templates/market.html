@@ -32,6 +32,10 @@
                             style="color: #10b981; font-size: 0.8rem;"></i> {{ skill }}</li>
                     {% endfor %}
                 </ul>
+                <a href="{{ url_for('take_quiz', role_name=role.role) }}" class="btn btn-sm btn-outline"
+                    style="margin-top: 1rem; width: 100%; text-align: center; border-color: rgba(255,255,255,0.2);">
+                    <i class="fa-solid fa-pen-to-square"></i> Take Skill Quiz
+                </a>
             </div>
         </div>
         {% endfor %}
@@ -56,6 +60,10 @@
                     <li style="margin-bottom: 0.3rem;"><i class="fa-solid fa-check"
                             style="color: #10b981; font-size: 0.8rem;"></i> System Design for ML Pipelines</li>
                 </ul>
+                <a href="{{ url_for('take_quiz', role_name='AI Solutions Architect') }}" class="btn btn-sm btn-outline"
+                    style="margin-top: 1rem; width: 100%; text-align: center; border-color: rgba(255,255,255,0.2);">
+                    <i class="fa-solid fa-pen-to-square"></i> Take Skill Quiz
+                </a>
             </div>
         </div>
         {% endif %}
@@ -102,6 +110,10 @@
                     {% endfor %}
                 </div>
             </div>
+            <a href="{{ url_for('take_quiz', role_name=item.role) }}" class="btn btn-sm btn-outline"
+                style="margin-top: 1rem; width: 100%; text-align: center; border-color: rgba(255,255,255,0.2);">
+                <i class="fa-solid fa-pen-to-square"></i> Take Skill Quiz
+            </a>
         </div>
         {% endfor %}
         {% else %}
@@ -127,8 +139,46 @@
                     Upload your resume to get personalized role optimization strategies.
                 </p>
             </div>
+            <a href="{{ url_for('take_quiz', role_name='Junior SDE') }}" class="btn btn-sm btn-outline"
+                style="margin-top: 1rem; width: 100%; text-align: center; border-color: rgba(255,255,255,0.2);">
+                <i class="fa-solid fa-pen-to-square"></i> Take Skill Quiz
+            </a>
         </div>
         {% endif %}
     </div>
 </div>
+</div>
+
+<!-- Loading Overlay -->
+<div id="quiz-loading"
+    style="display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.85); z-index: 1000; justify-content: center; align-items: center; flex-direction: column;">
+    <div class="loader"
+        style="border: 4px solid #f3f3f3; border-top: 4px solid var(--primary); border-radius: 50%; width: 50px; height: 50px; animation: spin 1s linear infinite;">
+    </div>
+    <h3 style="color: #fff; margin-top: 1.5rem;">Generating Your Custom Quiz...</h3>
+    <p style="color: var(--text-muted);">Please wait while AI crafts questions for this role.</p>
+</div>
+
+<script>
+    document.querySelectorAll('.btn-outline').forEach(btn => {
+        if (btn.textContent.includes('Take Skill Quiz')) {
+            btn.addEventListener('click', function (e) {
+                // Show loader
+                document.getElementById('quiz-loading').style.display = 'flex';
+            });
+        }
+    });
+</script>
+
+<style>
+    @keyframes spin {
+        0% {
+            transform: rotate(0deg);
+        }
+
+        100% {
+            transform: rotate(360deg);
+        }
+    }
+</style>
 {% endblock %}

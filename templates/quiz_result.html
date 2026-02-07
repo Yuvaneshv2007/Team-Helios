@@ -1,0 +1,93 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="page-header animate-fade-in">
+    <h1 class="page-title">Assessment Results: {{ role_name }}</h1>
+    <p style="color: var(--text-muted);">Here is your AI-generated performance report.</p>
+</div>
+
+<div class="content-grid">
+    <!-- Score Card -->
+    <div class="glass-card animate-fade-in" style="text-align: center; border-bottom: 4px solid var(--primary);">
+        <h2 style="color: var(--text-muted); font-size: 1rem; text-transform: uppercase; letter-spacing: 1px;">Your
+            Score</h2>
+        <div style="font-size: 4rem; font-weight: bold; color: #fff; margin: 1rem 0;">
+            {{ score }} <span style="font-size: 2rem; color: var(--text-muted);">/ {{ total }}</span>
+        </div>
+        <div style="font-size: 1.2rem; color: var(--secondary);">
+            {{ analysis.verdict }}
+        </div>
+    </div>
+
+    <!-- AI Analysis -->
+    <div class="glass-card animate-fade-in">
+        <h3 style="margin-bottom: 1.5rem;"><i class="fa-solid fa-robot" style="color: var(--accent);"></i> AI Insights
+        </h3>
+
+        <div style="margin-bottom: 2rem;">
+            <h4 style="color: #fff; display: flex; align-items: center; gap: 0.5rem; margin-bottom: 0.5rem;">
+                <i class="fa-solid fa-gauge-high" style="color: #10b981;"></i> Effectiveness
+            </h4>
+            <div
+                style="background: rgba(255,255,255,0.1); height: 10px; border-radius: 5px; overflow: hidden; height: 10px;">
+                <div
+                    style="width: {{ analysis.effectiveness_score }}%; background: linear-gradient(90deg, #10b981, #3b82f6); height: 100%;">
+                </div>
+            </div>
+            <p style="text-align: right; color: var(--text-muted); font-size: 0.9rem; margin-top: 5px;">{{
+                analysis.effectiveness_score }}% Readiness</p>
+        </div>
+
+        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 2rem;">
+            <div>
+                <h4 style="color: #fca5a5; margin-bottom: 1rem;"><i class="fa-solid fa-triangle-exclamation"></i> Weak
+                    Areas</h4>
+                <ul style="list-style: none; padding: 0; color: var(--text-muted);">
+                    {% for area in analysis.weak_areas %}
+                    <li style="margin-bottom: 0.5rem; display: flex; gap: 0.5rem;">
+                        <span style="color: #ef4444;">•</span> {{ area }}
+                    </li>
+                    {% else %}
+                    <li>No major weak areas detected!</li>
+                    {% endfor %}
+                </ul>
+            </div>
+            <div>
+                <h4 style="color: #6366f1; margin-bottom: 1rem;"><i class="fa-solid fa-crosshairs"></i> Focus
+                    Recommnedations</h4>
+                <ul style="list-style: none; padding: 0; color: var(--text-muted);">
+                    {% for rec in analysis.focus_recommendations %}
+                    <li style="margin-bottom: 0.5rem; display: flex; gap: 0.5rem;">
+                        <span style="color: #6366f1;">•</span> {{ rec }}
+                    </li>
+                    {% endfor %}
+                </ul>
+            </div>
+        </div>
+    </div>
+
+    <!-- Detailed Breakdown -->
+    <div class="glass-card animate-fade-in" style="grid-column: 1 / -1;">
+        <h3 style="margin-bottom: 1.5rem;">Question Breakdown</h3>
+        {% for res in results %}
+        <div
+            style="padding: 1rem; margin-bottom: 1rem; border-radius: 8px; background: {% if res.is_correct %}rgba(16, 185, 129, 0.1){% else %}rgba(239, 68, 68, 0.1){% endif %}; border-left: 4px solid {% if res.is_correct %}#10b981{% else %}#ef4444{% endif %};">
+            <p style="color: #fff; margin-bottom: 0.5rem; font-weight: 500;">{{ res.question }}</p>
+            <div style="font-size: 0.9rem; display: flex; gap: 2rem;">
+                <span style="color: {% if res.is_correct %}#10b981{% else %}#ef4444{% endif %};">
+                    You: {{ res.selected }} {% if res.is_correct %}<i class="fa-solid fa-check"></i>{% else %}<i
+                        class="fa-solid fa-xmark"></i>{% endif %}
+                </span>
+                {% if not res.is_correct %}
+                <span style="color: #10b981;">Correct: {{ res.correct }}</span>
+                {% endif %}
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+
+    <div style="grid-column: 1/-1; text-align: center;">
+        <a href="{{ url_for('market') }}" class="btn btn-outline">Back to Market Insights</a>
+    </div>
+</div>
+{% endblock %}

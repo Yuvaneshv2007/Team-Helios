@@ -1,0 +1,145 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="page-header animate-fade-in">
+    <h1 class="page-title">Internship Opportunities</h1>
+    <p style="color: var(--text-muted);">Explore curated internships and job openings tailored for you.</p>
+</div>
+
+<div class="content-grid">
+    <!-- Filters -->
+    <div class="glass-card animate-fade-in">
+        <h3 style="margin-bottom: 1rem;"><i class="fa-solid fa-filter"></i> Filter by Tags</h3>
+        <div style="display: flex; gap: 0.5rem; flex-wrap: wrap;">
+            <button class="btn btn-outline filter-btn active" data-filter="all" onclick="filterInternships('all', this)"
+                style="padding: 0.4rem 1rem; border-radius: 20px; font-size: 0.9rem;">
+                All
+            </button>
+            {% for tag in tags %}
+            <button class="btn btn-outline filter-btn" data-filter="{{ tag|lower|replace(' ', '-') }}"
+                onclick="filterInternships('{{ tag|lower|replace(' ', '-') }}', this)"
+                style="padding: 0.4rem 1rem; border-radius: 20px; font-size: 0.9rem;">
+                {{ tag }}
+            </button>
+            {% endfor %}
+        </div>
+    </div>
+
+    <!-- Internships Grid -->
+    <div style="grid-column: 1 / -1;">
+        <div class="internships-container"
+            style="display: grid; grid-template-columns: repeat(auto-fit, minmax(350px, 1fr)); gap: 1.5rem;">
+            {% for internship in internships %}
+            <div class="glass-card animate-fade-in internship-card"
+                data-tags="{{ internship.tags|join(' ')|lower|replace(' ', '-') }}">
+                <div
+                    style="display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 1rem;">
+                    <div>
+                        <h3 style="color: #fff; margin: 0; font-size: 1.3rem;">{{ internship.title }}</h3>
+                        <p style="color: var(--secondary); font-size: 1rem; margin-top: 0.2rem; font-weight: 500;">
+                            <i class="fa-solid fa-building"></i> {{ internship.company }}
+                        </p>
+                    </div>
+                    {% if internship.location == 'Remote' %}
+                    <span
+                        style="background: rgba(16, 185, 129, 0.2); color: #10b981; padding: 0.3rem 0.6rem; border-radius: 8px; font-size: 0.75rem;">
+                        <i class="fa-solid fa-house-laptop"></i> Remote
+                    </span>
+                    {% else %}
+                    <span
+                        style="background: rgba(99, 102, 241, 0.2); color: #a5b4fc; padding: 0.3rem 0.6rem; border-radius: 8px; font-size: 0.75rem;">
+                        <i class="fa-solid fa-location-dot"></i> {{ internship.location }}
+                    </span>
+                    {% endif %}
+                </div>
+
+                <div style="margin-bottom: 1rem; display: flex; gap: 0.5rem; flex-wrap: wrap;">
+                    {% for tag in internship.tags %}
+                    <span
+                        style="font-size: 0.8rem; border: 1px solid rgba(255,255,255,0.2); border-radius: 12px; padding: 2px 8px; color: var(--text-muted);">
+                        #{{ tag }}
+                    </span>
+                    {% endfor %}
+                </div>
+
+                <div style="background: rgba(0,0,0,0.2); padding: 1rem; border-radius: 8px; margin-bottom: 1rem;">
+                    <div
+                        style="display: grid; grid-template-columns: auto 1fr; gap: 0.8rem; font-size: 0.9rem; align-items: center;">
+                        <div style="color: var(--text-muted);"><i class="fa-solid fa-money-bill-wave"></i> Stipend:
+                        </div>
+                        <div style="color: #fff;">{{ internship.stipend }}</div>
+
+                        {% if internship.duration %}
+                        <div style="color: var(--text-muted);"><i class="fa-solid fa-clock"></i> Duration:</div>
+                        <div style="color: #fff;">{{ internship.duration }}</div>
+                        {% endif %}
+                    </div>
+                </div>
+
+                <p style="color: #cbd5e1; font-size: 0.9rem; line-height: 1.5; margin-bottom: 1.5rem; flex-grow: 1;">
+                    {{ internship.description }}
+                </p>
+
+                <div style="margin-top: auto;">
+                    <a href="{{ internship.link }}" target="_blank" class="btn btn-primary"
+                        style="width: 100%; text-align: center; display: block;">
+                        View & Apply <i class="fa-solid fa-external-link-alt" style="margin-left: 5px;"></i>
+                    </a>
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+        <p id="no-results" style="display: none; text-align: center; color: var(--text-muted); margin-top: 2rem;">No
+            internships found with this tag.</p>
+    </div>
+</div>
+
+<script>
+    function filterInternships(filter, btn) {
+        // Update Active Button
+        document.querySelectorAll('.filter-btn').forEach(b => {
+            b.classList.remove('active');
+            b.style.background = 'transparent';
+            b.style.color = '#fff';
+            b.style.borderColor = 'var(--primary)';
+        });
+        btn.classList.add('active');
+        btn.style.background = 'var(--primary)';
+        btn.style.color = '#fff';
+
+        const cards = document.querySelectorAll('.internship-card');
+        let visibleCount = 0;
+
+        cards.forEach(card => {
+            const tags = card.getAttribute('data-tags');
+
+            // Allow partial match (e.g. 'remote' matches 'remote-work')
+            // Using includes check on the formatted string
+            if (filter === 'all' || tags.includes(filter)) {
+                card.style.display = 'flex'; // Restore flex for layout
+                visibleCount++;
+            } else {
+                card.style.display = 'none';
+            }
+        });
+
+        const noResults = document.getElementById('no-results');
+        if (visibleCount === 0) {
+            noResults.style.display = 'block';
+        } else {
+            noResults.style.display = 'none';
+        }
+    }
+</script>
+
+<style>
+    .filter-btn:hover {
+        background: rgba(var(--primary-rgb), 0.2);
+    }
+
+    .filter-btn.active {
+        background: var(--primary) !important;
+        border-color: var(--primary) !important;
+    }
+</style>
+{% endblock %}

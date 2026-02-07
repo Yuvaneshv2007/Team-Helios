@@ -1,0 +1,131 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="page-header animate-fade-in">
+    <h1 class="page-title">LeetCode Analytics</h1>
+    <p style="color: var(--text-muted); max-width: 600px;">
+        Connect your LeetCode profile to receive AI-driven insights, study plans, and topic recommendations.
+    </p>
+</div>
+
+<!-- Flash Messages -->
+{% with messages = get_flashed_messages() %}
+{% if messages %}
+<div class="animate-fade-in"
+    style="background: rgba(16, 185, 129, 0.2); color: #10b981; padding: 1rem; border-radius: 10px; margin-bottom: 1.5rem; border: 1px solid rgba(16, 185, 129, 0.3); max-width: 800px; margin-left: auto; margin-right: auto;">
+    {{ messages[0] }}
+</div>
+{% endif %}
+{% endwith %}
+
+<div class="layout-grid" style="grid-template-columns: 1fr; max-width: 800px; margin: 0 auto;">
+
+    <!-- Input Section -->
+    <div class="glass-card animate-fade-in" style="animation-delay: 0.1s;">
+        <h2 style="margin-bottom: 1rem;"><i class="fa-solid fa-code" style="color: #f59e0b;"></i> Connect Profile</h2>
+        <form id="leetcodeForm" action="{{ url_for('leetcode_analysis') }}" method="post"
+            style="display: flex; gap: 1rem; flex-wrap: wrap;">
+            <input type="text" name="username" placeholder="Enter LeetCode Username"
+                value="{{ student.leetcode_username or '' if student else '' }}" required
+                style="flex: 1; padding: 1rem; background: rgba(15,23,42,0.5); color: white; border: 1px solid var(--glass-border); border-radius: 8px; font-size: 1rem;">
+
+            <input type="hidden" name="source_page" value="leetcode"> <!-- Helper to redirect back here -->
+
+            <button type="button" onclick="submitForm()" class="btn btn-primary"
+                style="padding: 0 2rem; font-size: 1rem;">
+                <i class="fa-solid fa-magnifying-glass-chart"></i> Analyze
+            </button>
+        </form>
+    </div>
+
+    <!-- Results Section -->
+    {% if session.get('leetcode_stats') %}
+    <div class="glass-card animate-fade-in" style="animation-delay: 0.2s; margin-top: 1rem;">
+        <h2 style="margin-bottom: 1rem;">Problem Stats</h2>
+        <div style="display: flex; gap: 1rem; flex-wrap: wrap;">
+            {% for category in ['advanced', 'intermediate', 'fundamental'] %}
+            <div
+                style="flex: 1; min-width: 150px; background: rgba(255,255,255,0.03); padding: 1rem; border-radius: 8px;">
+                <h4 style="text-transform: capitalize; color: var(--secondary); margin-bottom: 0.5rem;">{{ category }}
+                </h4>
+                {% for tag in session['leetcode_stats'][category] %}
+                {% if tag.problemsSolved > 0 %}
+                <div style="display: flex; justify-content: space-between; font-size: 0.9rem; margin-bottom: 0.3rem;">
+                    <span>{{ tag.tagName }}</span>
+                    <span style="font-weight: bold;">{{ tag.problemsSolved }}</span>
+                </div>
+                {% endif %}
+                {% endfor %}
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+    {% endif %}
+
+    {% if session.get('leetcode_suggestion_json') %}
+    <div class="analysis-grid"
+        style="display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 1.5rem; margin-top: 1.5rem;">
+
+        <div class="glass-card animate-fade-in">
+            <h3 style="color: #10b981; margin-bottom: 1rem;"><i class="fa-solid fa-dumbbell"></i> Key Strengths</h3>
+            <div style="color: var(--text-light); line-height: 1.6;">
+                {{ session['leetcode_suggestion_json']['strengths'] | safe }}
+            </div>
+        </div>
+
+        <div class="glass-card animate-fade-in" style="animation-delay: 0.1s;">
+            <h3 style="color: #f59e0b; margin-bottom: 1rem;"><i class="fa-solid fa-eye"></i> Strategic Focus</h3>
+            <div style="color: var(--text-light); line-height: 1.6;">
+                {{ session['leetcode_suggestion_json']['focus'] | safe }}
+            </div>
+        </div>
+
+        <div class="glass-card animate-fade-in" style="animation-delay: 0.2s;">
+            <h3 style="color: #3b82f6; margin-bottom: 1rem;"><i class="fa-solid fa-list-check"></i> Action Plan</h3>
+            <div style="color: var(--text-light); line-height: 1.6;">
+                {{ session['leetcode_suggestion_json']['plan'] | safe }}
+            </div>
+        </div>
+    </div>
+    {% elif session.get('leetcode_suggestion') %}
+    <div class="glass-card animate-fade-in"
+        style="animation-delay: 0.3s; margin-top: 1rem; border-left: 5px solid #10b981;">
+        <h2 style="margin-bottom: 1rem; color: #10b981;"><i class="fa-solid fa-robot"></i> AI Performance Analysis</h2>
+        <div style="color: var(--text-light); line-height: 1.7;">
+            {{ session.get('leetcode_suggestion') | safe }}
+        </div>
+    </div>
+    {% endif %}
+
+</div>
+
+<!-- Loading Overlay -->
+<div id="loadingOverlay" class="loading-overlay"
+    style="display: none; position: fixed; top:0; left:0; width:100%; height:100%; background:rgba(15, 23, 42, 0.95); z-index:9999; flex-direction:column; align-items:center; justify-content:center;">
+    <div class="spinner"
+        style="width: 50px; height: 50px; border: 5px solid rgba(255,255,255,0.3); border-radius: 50%; border-top-color: #f59e0b; animation: spin 1s ease-in-out infinite;">
+    </div>
+    <h3 style="color: white; font-size: 1.5rem; font-weight: 600; margin-top: 1rem;">Analyzing Profile...</h3>
+    <p style="color: var(--text-muted);">Fetching data from LeetCode & Asking AI for advice.</p>
+</div>
+
+<script>
+    function submitForm() {
+        const input = document.querySelector('input[name="username"]');
+        if (input.value.trim() === "") {
+            alert("Please enter a username");
+            return;
+        }
+        document.getElementById('loadingOverlay').style.display = 'flex';
+        document.getElementById('leetcodeForm').submit();
+    }
+</script>
+
+<style>
+    @keyframes spin {
+        to {
+            transform: rotate(360deg);
+        }
+    }
+</style>
+{% endblock %}

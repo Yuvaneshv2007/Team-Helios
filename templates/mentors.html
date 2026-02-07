@@ -1,0 +1,30 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="page-header animate-fade-in">
+    <h1 class="page-title">Mentor Network</h1>
+    <p style="color: var(--text-muted);">Connect with industry veterans and alumni.</p>
+</div>
+
+<div class="dashboard-grid">
+    <div class="glass-card animate-fade-in" style="text-align: center;">
+        <div
+            style="width: 80px; height: 80px; background: #6366f1; border-radius: 50%; margin: 0 auto 1rem; display: flex; align-items: center; justify-content: center; font-size: 1.5rem; color: white;">
+            JD</div>
+        <h3>John Doe</h3>
+        <p style="color: var(--primary); font-size: 0.9rem; margin-bottom: 0.5rem;">Senior Engineer @ Google</p>
+        <p style="color: var(--text-muted); font-size: 0.9rem;">Expert in Distrubuted Systems and Golang.</p>
+        <button class="btn btn-primary" style="margin-top: 1.5rem; width: 100%;">Request Call</button>
+    </div>
+
+    <div class="glass-card animate-fade-in" style="animation-delay: 0.1s; text-align: center;">
+        <div
+            style="width: 80px; height: 80px; background: #ec4899; border-radius: 50%; margin: 0 auto 1rem; display: flex; align-items: center; justify-content: center; font-size: 1.5rem; color: white;">
+            AS</div>
+        <h3>Alice Smith</h3>
+        <p style="color: var(--primary); font-size: 0.9rem; margin-bottom: 0.5rem;">Product Manager @ Meta</p>
+        <p style="color: var(--text-muted); font-size: 0.9rem;">Helping engineers transition to management.</p>
+        <button class="btn btn-primary" style="margin-top: 1.5rem; width: 100%;">Request Call</button>
+    </div>
+</div>
+{% endblock %}

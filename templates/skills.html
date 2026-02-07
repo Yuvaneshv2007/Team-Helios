@@ -1,0 +1,55 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="page-header animate-fade-in">
+    <div class="skills-header">
+        <h1 class="page-title">Skills Tracker</h1>
+        <button class="btn btn-primary"><i class="fa-solid fa-plus"></i> Add Skill</button>
+    </div>
+</div>
+
+<div class="dashboard-grid">
+    <!-- Skill Card -->
+    <div class="glass-card animate-fade-in">
+        <div style="display: flex; justify-content: space-between; margin-bottom: 1rem;">
+            <h3 style="margin: 0; font-size: 1.2rem;">Python</h3>
+            <span
+                style="background: rgba(16, 185, 129, 0.2); color: #10b981; padding: 0.2rem 0.6rem; border-radius: 20px; font-size: 0.8rem;">Verified</span>
+        </div>
+        <div class="stat-label">Proficiency</div>
+        <div
+            style="margin-top: 0.5rem; height: 8px; background: rgba(255,255,255,0.1); border-radius: 4px; overflow: hidden;">
+            <div style="width: 85%; height: 100%; background: var(--primary);"></div>
+        </div>
+        <div style="text-align: right; font-size: 0.8rem; margin-top: 0.2rem; color: var(--text-muted);">8.5/10</div>
+    </div>
+
+    <div class="glass-card animate-fade-in" style="animation-delay: 0.1s;">
+        <div style="display: flex; justify-content: space-between; margin-bottom: 1rem;">
+            <h3 style="margin: 0; font-size: 1.2rem;">React.js</h3>
+            <span
+                style="background: rgba(16, 185, 129, 0.2); color: #10b981; padding: 0.2rem 0.6rem; border-radius: 20px; font-size: 0.8rem;">Verified</span>
+        </div>
+        <div class="stat-label">Proficiency</div>
+        <div
+            style="margin-top: 0.5rem; height: 8px; background: rgba(255,255,255,0.1); border-radius: 4px; overflow: hidden;">
+            <div style="width: 70%; height: 100%; background: var(--secondary);"></div>
+        </div>
+        <div style="text-align: right; font-size: 0.8rem; margin-top: 0.2rem; color: var(--text-muted);">7.0/10</div>
+    </div>
+
+    <div class="glass-card animate-fade-in" style="animation-delay: 0.2s;">
+        <div style="display: flex; justify-content: space-between; margin-bottom: 1rem;">
+            <h3 style="margin: 0; font-size: 1.2rem;">Machine Learning</h3>
+            <span
+                style="background: rgba(245, 158, 11, 0.2); color: #f59e0b; padding: 0.2rem 0.6rem; border-radius: 20px; font-size: 0.8rem;">Learning</span>
+        </div>
+        <div class="stat-label">Proficiency</div>
+        <div
+            style="margin-top: 0.5rem; height: 8px; background: rgba(255,255,255,0.1); border-radius: 4px; overflow: hidden;">
+            <div style="width: 40%; height: 100%; background: linear-gradient(90deg, #f59e0b, #ef4444);"></div>
+        </div>
+        <div style="text-align: right; font-size: 0.8rem; margin-top: 0.2rem; color: var(--text-muted);">4.0/10</div>
+    </div>
+</div>
+{% endblock %}

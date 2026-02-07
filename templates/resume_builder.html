@@ -1,0 +1,238 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="dashboard-header">
+    <h1><i class="fa-solid fa-file-invoice"></i> Resume Builder</h1>
+    <p>Create a professional resume in seconds. Enter your details below.</p>
+</div>
+
+<div class="content-grid" style="grid-template-columns: 1fr; max-width: 800px; margin: 0 auto;">
+    <div class="glass-card">
+        <form action="{{ url_for('generate_resume') }}" method="POST" class="resume-form">
+            <div class="form-group">
+                <label for="full_name">Full Name</label>
+                <input type="text" id="full_name" name="full_name" placeholder="e.g. John Doe" required
+                    value="{{ resume_data.get('full_name', session.get('user_name', '')) }}">
+            </div>
+
+            <div class="form-group">
+                <label for="institute_name">Institute / University Name</label>
+                <input type="text" id="institute_name" name="institute_name"
+                    placeholder="e.g. Massachusetts Institute of Technology" required
+                    value="{{ resume_data.get('institute_name', '') }}">
+            </div>
+
+            <div class="form-group">
+                <label for="degree">Degree</label>
+                <select id="degree" name="degree"
+                    style="width: 100%; padding: 0.8rem 1rem; border-radius: 8px; background: rgba(255, 255, 255, 0.05); border: 1px solid rgba(255, 255, 255, 0.1); color: var(--text-primary); font-family: 'Outfit', sans-serif; font-size: 1rem;">
+                    <option value="" disabled {% if not resume_data.get('degree') %}selected{% endif %}>Select your
+                        degree</option>
+                    <option value="B.E." {% if resume_data.get('degree')=='B.E.' %}selected{% endif %}>B.E. (Bachelor of
+                        Engineering)</option>
+                    <option value="B.Tech" {% if resume_data.get('degree')=='B.Tech' %}selected{% endif %}>B.Tech
+                        (Bachelor of Technology)</option>
+                    <option value="B.Sc" {% if resume_data.get('degree')=='B.Sc' %}selected{% endif %}>B.Sc (Bachelor of
+                        Science)</option>
+                    <option value="M.E." {% if resume_data.get('degree')=='M.E.' %}selected{% endif %}>M.E. (Master of
+                        Engineering)</option>
+                    <option value="M.Tech" {% if resume_data.get('degree')=='M.Tech' %}selected{% endif %}>M.Tech
+                        (Master of Technology)</option>
+                    <option value="M.Sc" {% if resume_data.get('degree')=='M.Sc' %}selected{% endif %}>M.Sc (Master of
+                        Science)</option>
+                    <option value="BCA" {% if resume_data.get('degree')=='BCA' %}selected{% endif %}>BCA (Bachelor of
+                        Computer Applications)</option>
+                    <option value="MCA" {% if resume_data.get('degree')=='MCA' %}selected{% endif %}>MCA (Master of
+                        Computer Applications)</option>
+                </select>
+                <style>
+                    /* Ensure dropdown options are dark */
+                    #degree option {
+                        background-color: #1e293b;
+                        /* Slate-800 */
+                        color: white;
+                    }
+                </style>
+            </div>
+
+            <div class="form-row" style="display: grid; grid-template-columns: 1fr 1fr; gap: 1rem;">
+                <div class="form-group">
+                    <label for="github_id">GitHub Username / ID</label>
+                    <div class="input-icon-wrapper">
+                        <i class="fa-brands fa-github input-icon"></i>
+                        <input type="text" id="github_id" name="github_id" placeholder="e.g. johndoe123" required
+                            value="{{ resume_data.get('github_id', '') }}">
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label for="leetcode_id">LeetCode Username / ID</label>
+                    <div class="input-icon-wrapper">
+                        <i class="fa-solid fa-code input-icon"></i>
+                        <input type="text" id="leetcode_id" name="leetcode_id" placeholder="e.g. johndoe_leet" required
+                            value="{{ resume_data.get('leetcode_id', '') }}">
+                    </div>
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label for="skills">Skills (Comma separated)</label>
+                <input type="text" id="skills" name="skills"
+                    placeholder="e.g. Python, Flask, React, Data Structures, Machine Learning" required
+                    value="{{ resume_data.get('skills', '') }}">
+                <small style="color: rgba(255,255,255,0.6); display: block; margin-top: 0.5rem;">List your top technical
+                    skills separated by commas.</small>
+            </div>
+
+            <div class="form-group">
+                <label for="specialization">Specialization / Field of Interest</label>
+                <input type="text" id="specialization" name="specialization"
+                    placeholder="e.g. Full Stack Development, Data Science, Embedded Systems" required
+                    value="{{ resume_data.get('specialization', '') }}">
+            </div>
+
+            <div class="form-group">
+                <label for="summary">Professional Summary (Optional)</label>
+                <textarea id="summary" name="summary" rows="3"
+                    placeholder="Write a brief professional summary about yourself..."
+                    style="width: 100%; padding: 0.8rem; background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.1); color: white; border-radius: 8px; font-family: inherit;">{{ resume_data.get('summary', '') }}</textarea>
+                <small style="color: rgba(255,255,255,0.6); display: block; margin-top: 0.5rem;">Leave blank to use the
+                    default AI-generated summary.</small>
+            </div>
+
+
+
+            <!-- PROJECTS SECTION -->
+            <div class="form-group">
+                <label
+                    style="color: var(--accent); font-size: 1.1rem; border-bottom: 1px solid rgba(255,255,255,0.1); padding-bottom: 0.5rem; margin-bottom: 1rem; display: block;">
+                    <i class="fa-solid fa-laptop-code"></i> Projects
+                </label>
+                <div id="projects-container">
+                    {% if resume_data.get('projects') %}
+                    {% for project in resume_data.get('projects') %}
+                    <div class="project-entry"
+                        style="background: rgba(255,255,255,0.03); padding: 1rem; border-radius: 8px; margin-bottom: 1rem;">
+                        <input type="text" name="project_title" placeholder="Project Title" value="{{ project.title }}"
+                            style="width: 100%; padding: 0.8rem 1rem; border-radius: 8px; background: rgba(255, 255, 255, 0.05); border: 1px solid rgba(255, 255, 255, 0.1); color: var(--text-primary); font-family: 'Outfit', sans-serif; font-size: 1rem; margin-bottom: 0.5rem;">
+                        <textarea name="project_desc" placeholder="Project Description (Short summary of what it does)"
+                            rows="3"
+                            style="width: 100%; padding: 0.8rem; background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.1); color: white; border-radius: 8px; font-family: inherit; margin-bottom: 0.5rem;">{{ project.desc }}</textarea>
+                        <input type="text" name="project_link" placeholder="GitHub/Project Link (Optional)"
+                            value="{{ project.link }}"
+                            style="width: 100%; padding: 0.8rem 1rem; border-radius: 8px; background: rgba(255, 255, 255, 0.05); border: 1px solid rgba(255, 255, 255, 0.1); color: var(--text-primary); font-family: 'Outfit', sans-serif; font-size: 1rem; margin-bottom: 0;">
+                        <button type="button" onclick="this.parentElement.remove()"
+                            style="background: none; border: none; color: #ff6b6b; cursor: pointer; margin-top: 0.5rem; font-size: 0.9rem;"><i
+                                class="fa-solid fa-trash"></i> Remove Project</button>
+                    </div>
+                    {% endfor %}
+                    {% else %}
+                    <!-- Default Empty Project Entry -->
+                    <div class="project-entry"
+                        style="background: rgba(255,255,255,0.03); padding: 1rem; border-radius: 8px; margin-bottom: 1rem;">
+                        <input type="text" name="project_title" placeholder="Project Title"
+                            style="width: 100%; padding: 0.8rem 1rem; border-radius: 8px; background: rgba(255, 255, 255, 0.05); border: 1px solid rgba(255, 255, 255, 0.1); color: var(--text-primary); font-family: 'Outfit', sans-serif; font-size: 1rem; margin-bottom: 0.5rem;">
+                        <textarea name="project_desc" placeholder="Project Description (Short summary of what it does)"
+                            rows="3"
+                            style="width: 100%; padding: 0.8rem; background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.1); color: white; border-radius: 8px; font-family: inherit; margin-bottom: 0.5rem;"></textarea>
+                        <input type="text" name="project_link" placeholder="GitHub/Project Link (Optional)"
+                            style="width: 100%; padding: 0.8rem 1rem; border-radius: 8px; background: rgba(255, 255, 255, 0.05); border: 1px solid rgba(255, 255, 255, 0.1); color: var(--text-primary); font-family: 'Outfit', sans-serif; font-size: 1rem; margin-bottom: 0;">
+                    </div>
+                    {% endif %}
+                </div>
+                <button type="button" id="add-project-btn" class="btn"
+                    style="background: rgba(255,255,255,0.1); font-size: 0.9rem; padding: 0.5rem 1rem; margin-top: 0.5rem;">
+                    <i class="fa-solid fa-plus"></i> Add Another Project
+                </button>
+            </div>
+
+            <!-- ACHIEVEMENTS SECTION -->
+            <div class="form-group">
+                <label for="achievements"
+                    style="color: var(--accent); font-size: 1.1rem; border-bottom: 1px solid rgba(255,255,255,0.1); padding-bottom: 0.5rem; margin-bottom: 1rem; display: block;">
+                    <i class="fa-solid fa-trophy"></i> Achievements
+                </label>
+                <textarea id="achievements" name="achievements" rows="5"
+                    placeholder="• Won 1st place in Hackathon 2024&#10;• Solved 500+ problems on LeetCode&#10;• Dean's List for Academic Excellence"
+                    style="width: 100%; padding: 0.8rem; background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.1); color: white; border-radius: 8px; font-family: inherit;">{{ resume_data.get('achievements', '') }}</textarea>
+                <small style="color: rgba(255,255,255,0.6); display: block; margin-top: 0.5rem;">Enter each achievement
+                    on a new line.</small>
+            </div>
+
+            <!-- Use existing styles for buttons -->
+            <button type="submit" class="btn btn-primary" style="width: 100%; margin-top: 1rem;">
+                <i class="fa-solid fa-wand-magic-sparkles"></i> Generate Resume
+            </button>
+        </form>
+    </div>
+</div>
+
+<style>
+    /* Add some specific styles for the form if needed, reusing global glass-card */
+    .form-group {
+        margin-bottom: 1.5rem;
+    }
+
+    .form-group label {
+        display: block;
+        margin-bottom: 0.5rem;
+        color: var(--text-secondary);
+        font-weight: 500;
+    }
+
+    .form-group input {
+        width: 100%;
+        padding: 0.8rem 1rem;
+        border-radius: 8px;
+        background: rgba(255, 255, 255, 0.05);
+        border: 1px solid rgba(255, 255, 255, 0.1);
+        color: var(--text-primary);
+        font-family: 'Outfit', sans-serif;
+        font-size: 1rem;
+    }
+
+    .form-group input:focus {
+        outline: none;
+        border-color: var(--accent);
+        background: rgba(255, 255, 255, 0.1);
+    }
+
+    .input-icon-wrapper {
+        position: relative;
+    }
+
+    .input-icon-wrapper input {
+        padding-left: 2.5rem;
+    }
+
+    .input-icon {
+        position: absolute;
+        left: 1rem;
+        top: 50%;
+        transform: translateY(-50%);
+        color: var(--text-secondary);
+    }
+</style>
+
+<script>
+    document.addEventListener('DOMContentLoaded', function () {
+        const addProjectBtn = document.getElementById('add-project-btn');
+        if (addProjectBtn) {
+            addProjectBtn.addEventListener('click', function () {
+                const container = document.getElementById('projects-container');
+                const newEntry = document.createElement('div');
+                newEntry.className = 'project-entry';
+                newEntry.style.cssText = "background: rgba(255,255,255,0.03); padding: 1rem; border-radius: 8px; margin-bottom: 1rem;";
+
+                newEntry.innerHTML = `
+                    <input type="text" name="project_title" placeholder="Project Title" style="width: 100%; padding: 0.8rem 1rem; border-radius: 8px; background: rgba(255, 255, 255, 0.05); border: 1px solid rgba(255, 255, 255, 0.1); color: var(--text-primary); font-family: 'Outfit', sans-serif; font-size: 1rem; margin-bottom: 0.5rem;">
+                    <textarea name="project_desc" placeholder="Project Description (Short summary of what it does)" rows="3" style="width: 100%; padding: 0.8rem; background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.1); color: white; border-radius: 8px; font-family: inherit; margin-bottom: 0.5rem;"></textarea>
+                    <input type="text" name="project_link" placeholder="GitHub/Project Link (Optional)" style="width: 100%; padding: 0.8rem 1rem; border-radius: 8px; background: rgba(255, 255, 255, 0.05); border: 1px solid rgba(255, 255, 255, 0.1); color: var(--text-primary); font-family: 'Outfit', sans-serif; font-size: 1rem; margin-bottom: 0;">
+                    <button type="button" onclick="this.parentElement.remove()" style="background: none; border: none; color: #ff6b6b; cursor: pointer; margin-top: 0.5rem; font-size: 0.9rem;"><i class="fa-solid fa-trash"></i> Remove Project</button>
+                `;
+
+                container.appendChild(newEntry);
+            });
+        }
+    });
+</script>
+{% endblock %}
